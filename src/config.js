@@ -7,3 +7,6 @@ export const db = {
   };
   
   export const port = process.env.PORT || 4000;
+
+  export const jwtSecretAg = process.env.JWTSecret || "AgroTrujillo";
+  export const jwtReSecretAg = process.env.JWTSecret || "REAgroTrujillo";
