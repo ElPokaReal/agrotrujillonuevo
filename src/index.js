@@ -3,16 +3,16 @@ import cors from "cors";
 import morgan from "morgan";
 import { port } from "./config.js";
 
+const app = express();
+
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
     res.json({ message: "API Oficial de Agrotrujillo"});
 });
-
-app.use(router);
 
 app.use((err, req, res, next) => {
     return res.status(500).json({
@@ -22,4 +22,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port)
-console.log(`Servidor corriendo en el puerto: ${PORT}`);
+console.log(`Servidor corriendo en el puerto: ${port}`);
