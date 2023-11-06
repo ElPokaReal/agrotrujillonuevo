@@ -3,19 +3,27 @@ import cors from "cors";
 import morgan from "morgan";
 import { port } from "./config.js";
 import userAuth from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.get("/", (req, res) => {
-    res.json({ 
-        estado: true, 
-        message: "API Oficial de Agrotrujillo"});
-});
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+app.get('/', (req, res) => res.render('home'));
+
+//app.get("/", (req, res) => {
+//    res.json({ 
+//        estado: true, 
+//        message: "API Oficial de Agrotrujillo"});
+//});
 
 app.use(userAuth)
 
