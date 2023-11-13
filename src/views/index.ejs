@@ -6,6 +6,17 @@
     <title>Hola</title>
 </head>
 <body>
-    <h1>Holaaa</h1>
+    <nav>
+        <h1><a href="/">Menu Principal</a></h1>
+        <ul>
+          <% if (user) { %>
+            <li>Welcome, <%= user.user_email %></li>
+            <li><a href="/logout">Log out</a></li>
+          <% } else { %>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="/register" class="btn">Sign up</a></li>
+          <% } %>
+        </ul>
+      </nav>
 </body>
 </html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+</head>
+<body>
+    <form action="javascript:void(0);" method="POST">
+        <h2>Registro</h2>
+        <label for="user_name">Nombre de Usuario</label>
+        <input type="text" id="user_name" name="user_name" required />
+        <label for="user_email">Email</label>
+        <input type="email" id="user_email" name="user_email" required />
+        <div class="email error"></div>
+        <label for="user_password">Contraseña</label>
+        <input type="password" id="user_password" name="user_password" required />
+        <div class="password error"></div>
+        <button type="submit">Registrarse</button>
+    </form>
+</body>
+
+</html>
+
+<script>
+    const form = document.querySelector('form');
+    const emailError = document.querySelector('.email.error');
+    const passwordError = document.querySelector('.password.error');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // reset errors
+        emailError.textContent = '';
+        passwordError.textContent = '';
+
+        // get values
+        const user_name = form.user_name.value;
+        const user_email = form.user_email.value;
+        const user_password = form.user_password.value;
+
+        try {
+            const res = await fetch('/register', {
+                method: 'POST',
+                body: JSON.stringify({ user_name, user_email, user_password }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+            if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+            }
+            if (data.user) {
+                location.assign('/casa');
+            }
+
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+    });
+</script>
