@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { UserLogin_get, UserLogin_post, UserSignup_get, UserSignup_post, UserLogout, UserGetusers } = require('../controllers/AuthUsers.controller');
+const { UserLogin_get, UserLogin_post, UserSignup_get, UserSignup_post, UserLogout, UserGetusers, UserByID } = require('../controllers/AuthUsers.controller');
 
 const AuthUsers = Router();
 
@@ -16,6 +16,9 @@ AuthUsers.get('/logout', UserLogout);
 
 //Obtener usuarios
 AuthUsers.get('/users', UserGetusers);
+
+//Obtener usuario por id
+AuthUsers.get('/users/:id', UserByID);
 
 //Exportar Modulo
 module.exports = AuthUsers;

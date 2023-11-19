@@ -1,11 +1,20 @@
 const { Router } = require ('express');
 const { checkAuth } = require('../middlewares/AuthMiddleware');
+const { getAllProductores, getProductorByCedula, createProductor, deleteProductorByCedula, updateProductor } = require('../controllers/Productores.controller');
 
 const Productores = Router();
 
-Productores.get('/productores', checkAuth);
+//* Rutas especificas para productores
+//TODO: Agregar la parte de créditos y técnicos 
 
-// TODO: Agregar las demás rutas
+Productores.get('/productores', checkAuth, getAllProductores);
 
+Productores.get('/productores/:cedula_productor', checkAuth, getProductorByCedula);
+
+Productores.post('/productores', checkAuth, createProductor);
+
+Productores.delete('/productores/:cedula_productor', checkAuth, deleteProductorByCedula);
+
+Productores.put('/productores/:cedula_productor', checkAuth, updateProductor)
 
 module.exports = Productores;

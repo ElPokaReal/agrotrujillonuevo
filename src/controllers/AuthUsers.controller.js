@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const pool = require('../db');
 
 //Manejador de errores
 const handleErrors = (err) => {
@@ -28,7 +29,7 @@ const handleErrors = (err) => {
   return errorMessages;
 }
 
-//Primero comenzaremos asignando una maxAge a nuestro token para luego generarlo y asignarlo a un usuario
+//* Primero comenzaremos asignando una maxAge a nuestro token para luego generarlo y asignarlo a un usuario
 const maxAge = 3 * 24 * 60 * 60;
 const newToken = (user) => {
   return jwt.sign({ user_id: user.user_id, email: user.user_email }, process.env.AGRO_TOKEN, {
@@ -36,13 +37,13 @@ const newToken = (user) => {
   });
 };
 
-//Renderizamos el login
+//* Renderizamos el login
 const UserLogin_get = (req, res) => {
     res.render('login')
     console.log('Renderizando Login')
 };
 
-//Renderizamos el signup
+//* Renderizamos el signup
 const UserSignup_get = (req, res) => {
     res.render('register')
     console.log('Renderizando Register')
@@ -69,7 +70,7 @@ const UserLogin_post = async (req, res) => {
       if (result.auth) {
           const token = newToken(result.user);
           res.cookie('MyToken', token, { httpOnly: false, maxAge: maxAge * 1000 });
-          res.status(200).json({ user: result.user.user_id });
+          res.status(200).json({ user: result.user.user_id, token: token});
       } else {
           res.status(400).json({ message: result.message });
       }
@@ -95,11 +96,22 @@ const UserGetusers = async (req, res, next) => {
     }
 };
 
+const UserByID = async (req, res) => {
+  try {
+    const userId = req.params.id; // Obtener el ID del usuario de la solicitud
+    const UserbyID = await User.findByUserId(userId);
+    res.json(UserbyID);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
     UserLogin_get,
     UserLogin_post,
     UserSignup_get,
     UserSignup_post,
     UserLogout,
-    UserGetusers
+    UserGetusers,
+    UserByID
 }
