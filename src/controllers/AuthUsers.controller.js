@@ -1,38 +1,31 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
-// handle errors
+//Manejador de errores
 const handleErrors = (err) => {
-    console.log(err.message, err.code);
-    let errors = { email: '', password: '' };
-  
-    // Email incorrecto
-    if (err.message === 'email incorrecto') {
-      errors.email = 'Este correo no está registrado';
-    }
-  
-    // Contraseña incorrecta
-    if (err.message === 'contraseña incorrecta') {
-      errors.password = 'Esta contraseña no es correcta';
-    }
-  
-    // Email ya registrado
-    if (err.code === 11000) {
-      errors.email = 'El correo ya está registrado';
-      return errors;
-    }
-  
-    // validation errors
-    if (err.message.includes('Validación de usuario fallida')) {
-      // console.log(err);
-      Object.values(err.errors).forEach(({ properties }) => {
-        // console.log(val);
-        // console.log(properties);
-        errors[properties.path] = properties.message;
-      });
-    }
-  
-    return errors;
+  const { message, code, errors } = err;
+  let errorMessages = { email: '', password: '' };
+
+  if (message === 'email incorrecto') {
+    errorMessages.email = 'Este correo no está registrado';
+  }
+
+  if (message === 'contraseña incorrecta') {
+    errorMessages.password = 'Esta contraseña no es correcta';
+  }
+
+  if (code === 11000) {
+    errorMessages.email = 'El correo ya está registrado';
+    return errorMessages;
+  }
+
+  if (message.includes('Validación de usuario fallida')) {
+    Object.values(errors).forEach(({ properties }) => {
+      errorMessages[properties.path] = properties.message;
+    });
+  }
+
+  return errorMessages;
 }
 
 //Primero comenzaremos asignando una maxAge a nuestro token para luego generarlo y asignarlo a un usuario

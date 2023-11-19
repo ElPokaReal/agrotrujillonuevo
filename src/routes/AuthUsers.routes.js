@@ -17,6 +17,5 @@ AuthUsers.get('/logout', UserLogout);
 //Obtener usuarios
 AuthUsers.get('/users', UserGetusers);
 
-
 //Exportar Modulo
 module.exports = AuthUsers;

@@ -5,35 +5,39 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const AuthUsers = require('./routes/AuthUsers.routes');
 const { checkUser } = require('./middlewares/AuthMiddleware');
+const Productores = require('./routes/Productores.Routes');
 require('dotenv').config();
 
 const app = express();
 
-//Middlewares
+//* Middlewares
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
-//Visor setup
+//* Visor setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//Rutas
-app.get('*', checkUser)
+//* Rutas
+//TODO: Agregar las rutas faltantes
+app.get('*', checkUser);
 
 app.get('/casa', (req, res) =>{
     res.render('index')
-})
+});
 
-app.use(AuthUsers)
+app.use(AuthUsers);
 
 app.get('/', (req, res) =>{
     res.json({message: 'Bienvenido a la API de Agrotrujillo'})
-})
+});
 
-//Ejecución de puerto
+app.use(Productores);
+
+//* Ejecución de puerto
 const port = process.env.SERVER_PORT;
 
 app.listen(port)

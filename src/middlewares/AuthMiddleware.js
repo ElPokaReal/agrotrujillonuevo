@@ -3,6 +3,7 @@ const User = require('../models/User')
 const {config} = require('dotenv')
 config();
 
+//* Chequeo de autenticación de Usuarios
 const checkAuth = (req, res, next) => {
 
     const token = req.cookies.MyToken;
@@ -22,7 +23,7 @@ const checkAuth = (req, res, next) => {
     }
 };
 
-// src/middlewares/AuthMiddleware.js
+//* Chequeo de usuario
 const checkUser = (req, res, next) => {
     const token = req.cookies.MyToken;
     if (token){
