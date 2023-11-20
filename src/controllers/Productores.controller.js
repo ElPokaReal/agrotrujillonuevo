@@ -23,7 +23,7 @@ const getAllProductores = async (req, res) => {
   };
 
   const createProductor = async (req, res) => {
-    const cedula = req.body.cedula_productor; //* Suponiendo que el número de cédula está en el cuerpo de la solicitud
+    const cedula = req.body.cedula_productor;
   
     try {
       const existingProductor = await Productor.findByProductorCedula(cedula);
@@ -31,7 +31,7 @@ const getAllProductores = async (req, res) => {
         return res.status(400).json({ message: 'El productor ya está registrado con este número de cédula' });
       }
   
-      //! Si el productor no está registrado con este número de cédula, continuar con la creación
+      //* Si el productor no está registrado con este número de cédula, continuar con la creación
       const productor = Productor.create(req.body);
       res.json(productor);
     } catch (error) {
