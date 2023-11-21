@@ -25,7 +25,6 @@ app.get('/', (req, res) =>{
 
 app.use(AuthUsers);
 
-
 app.use(Productores);
 
 //* Ejecución de puerto
@@ -35,4 +34,3 @@ const port = process.env.SERVER_PORT;
 app.listen(port)
 
 console.log(`Servidor en puerto ${port}`)
-
