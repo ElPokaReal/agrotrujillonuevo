@@ -5,7 +5,6 @@ const { getAllProductores, getProductorByCedula, createProductor, deleteProducto
 const Productores = Router();
 
 //* Rutas especificas para productores
-//TODO: Agregar la parte de créditos y técnicos 
 
 Productores.get('/productores', checkAuth, getAllProductores);
 

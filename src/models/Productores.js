@@ -23,14 +23,14 @@ const Productor = {
     },
 
     async findByProductorCedula(cedula_productor){
-        const query = 'SELECT * FROM productores WHERE cedula_productor = $1';
+        const query = `SELECT Pro.*, Ru.* FROM productores Pro INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro WHERE Pro.cedula_productor LIKE $1`;
         const values = [cedula_productor];
         const result = await pool.query(query, values);
         return result.rows[0];
       },
 
     async getAllProductores(){
-        const query = 'SELECT * FROM productores';
+        const query = 'SELECT Pro.*, Ru.* FROM productores Pro INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro';
         const result = await pool.query(query);
         return result.rows;
     }

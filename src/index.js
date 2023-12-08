@@ -3,7 +3,8 @@ const morgan = require('morgan');
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const AuthUsers = require('./routes/AuthUsers.routes');
-const Productores = require('./routes/Productores.Routes');
+const Productores = require('./routes/Productores.routes');
+const Creditos = require('./routes/Creditos.routes');
 require('dotenv').config();
 
 const app = express();
@@ -24,9 +25,9 @@ app.get('/', (req, res) =>{
 });
 
 app.use(AuthUsers);
-
-
 app.use(Productores);
+app.use(Creditos);
+
 
 //* Ejecución de puerto
 
