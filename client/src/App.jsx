@@ -1,17 +1,27 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import LoginForm from './components/LoginForm'
-import {Container} from '@mui/material'
-import Menu from './components/Navbar'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginForm from "./components/pages/LoginForm";
+import Dashboard from "./components/pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
 
-function App() {
-
+export default function () {
   return (
-    <BrowserRouter>
+    <>
+      <Router>
         <Routes>
           <Route path="/" element={<LoginForm />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-    </BrowserRouter>
-  )
+      </Router>
+      <ToastContainer />
+    </>
+  );
 }
-
-export default App

@@ -83,7 +83,7 @@ const UserLogin_post = async (req, res) => {
 
 const UserLogout = (req, res) => {
     res.cookie('MyToken', '', { maxAge: 1 });
-    res.redirect('/casa');
+    res.redirect('/');
 };
 
 
@@ -106,6 +106,43 @@ const UserByID = async (req, res) => {
   }
 };
 
+const checkIsAuthenticated = (req, res) => {
+  const token = req.cookies.MyToken;
+  if (token) {
+    jwt.verify(token, process.env.AGRO_TOKEN, (err, decodedToken) => {
+      if (err) {
+        console.log('No estás autenticado')
+        res.status(401).json({ isAuthenticated: false });
+      } else {
+        res.status(200).json({ isAuthenticated: true });
+      }
+    });
+  } else {
+    res.status(401).json({ isAuthenticated: false });
+  }
+};
+
+const UserLoggedIn = async (req, res) => {
+  try {
+    const token = req.cookies.MyToken;
+    if (token) {
+      jwt.verify(token, process.env.AGRO_TOKEN, async (err, decodedToken) => {
+        if (err) {
+          res.status(401).json({ error: 'No estás autenticado' });
+        } else {
+          const userId = decodedToken.user_id;
+          const user = await User.findByUserId(userId);
+          res.json(user);
+        }
+      });
+    } else {
+      res.status(401).json({ error: 'No estás autenticado' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
     UserLogin_get,
     UserLogin_post,
@@ -113,5 +150,7 @@ module.exports = {
     UserSignup_post,
     UserLogout,
     UserGetusers,
-    UserByID
+    UserByID,
+    UserLoggedIn,
+    checkIsAuthenticated
 }

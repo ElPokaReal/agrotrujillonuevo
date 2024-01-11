@@ -12,7 +12,10 @@ const app = express();
 //* Middlewares
 
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Reemplaza esto con el dominio de tu cliente
+    credentials: true, // Permitir cookies
+  }));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
