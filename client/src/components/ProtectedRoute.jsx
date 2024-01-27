@@ -12,7 +12,9 @@ function ProtectedRoute({ children }) {
      .then(data => {
        setIsAuthenticated(data.isAuthenticated);
        if (!data.isAuthenticated) {
-         toast.error('Debes iniciar sesión para ver esta página');
+         toast.error('Debes iniciar sesión para ver esta página',{
+          toastId: 'error1'
+         });
        }
      })
      .catch(error => console.error('Error:', error));

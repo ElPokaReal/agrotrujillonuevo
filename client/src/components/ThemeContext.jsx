@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-const getTheme = () => {
-    if(typeof window !== 'undefined' && window.localStorage){
-        const storedPrefs = window.localStorage.getItem('color-theme')
-        if(typeof storedPrefs === 'string'){
-            return storedPrefs
+const getInitialTheme = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        // checks for a previous user preference in localStorage, and uses the browser's color scheme as a backup:
+        const storedPref = window.localStorage.getItem('color-theme')
+        if (typeof storedPref === 'string') {
+            return storedPref
         }
 
-        const userMedia = window.matchMedia('(prefers-color-scheme: dark)')
-        if(userMedia.matches){
+        const userMedia = window.matchMedia('prefers-color-scheme:dark')
+        if (userMedia.matches) {
             return 'dark'
         }
-
-        return 'light'
+        return 'light' // light theme as the default;
     }
 }
-
 export const ThemeContext = React.createContext()
 
 export const ThemeProvider = ({ initialTheme, children }) => {
-    const [theme, setTheme] = useState(getTheme)
+    const [theme, setTheme] = useState(getInitialTheme)
 
     const rawSetTheme = (rawTheme) => {
         const root = window.document.documentElement
@@ -27,25 +26,12 @@ export const ThemeProvider = ({ initialTheme, children }) => {
 
         root.classList.remove(isDark ? 'light' : 'dark')
         root.classList.add(rawTheme)
-
         localStorage.setItem('color-theme', rawTheme)
     }
-
-    {/*
-    
-    if(initialTheme){
-        rawSetTheme(initialTheme)
-    }
-
-    {*/}
 
     useEffect(() => {
         rawSetTheme(theme)
     }, [theme])
 
-    return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    )
+    return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>
 }

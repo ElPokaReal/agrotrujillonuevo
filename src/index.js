@@ -21,14 +21,12 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 //* Rutas
-//TODO: Agregar las rutas faltantes
 
 app.get('/', (req, res) =>{
     res.json({message: 'Bienvenido a la API de Agrotrujillo'})
 });
 
 app.use(AuthUsers);
-
 app.use(Productores);
 app.use(Creditos);
 
