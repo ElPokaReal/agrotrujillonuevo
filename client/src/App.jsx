@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LoginForm from "./pages/LoginForm";
+import MainPage from "./pages/MainPage";
 import Dashboard from "./pages/Dashboard";
 import Creditos from "./pages/Creditos";
 import Productores from "./pages/Productores";
@@ -30,7 +30,7 @@ function App() {
       <ToastContainer closeOnClick limit={1} theme="colored"/>
       <Router>
         <Routes>
-          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginForm /> }  />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <MainPage /> }  />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Dashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/productores" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Productores /></DashboardLayout></ProtectedRoute>} />
           <Route path="/creditos" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Creditos /></DashboardLayout></ProtectedRoute>} />

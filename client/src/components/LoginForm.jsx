@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function LoginForm() {
-  const [user_email, setUserEmail] = useState("");
-  const [user_password, setUserPassword] = useState("");
-  const navigate = useNavigate();
+function LoginForm({setShowRegistration}) {
+ const [user_email, setUserEmail] = useState("");
+ const [user_password, setUserPassword] = useState("");
+ const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+ const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
@@ -20,7 +20,7 @@ function LoginForm() {
           user_email,
           user_password,
         }),
-        credentials: "include", // Aquí es donde le decimos a Fetch que incluya las cookies en la solicitud
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -34,9 +34,9 @@ function LoginForm() {
     } catch (error) {
       console.log("Error al iniciar sesión", error);
     }
-  };
+ };
 
-  return (
+ return (
     <section className="bg-gray-50 dark:bg-gray-900 h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
@@ -53,41 +53,41 @@ function LoginForm() {
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
-                  htmlFor="user_email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 htmlFor="user_email"
+                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Tu Correo
+                 Tu Correo
                 </label>
                 <input
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  type="email"
-                  name="user_email"
-                  id="user_email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="tucorreo@gmail.com"
-                  required=""
+                 onChange={(e) => setUserEmail(e.target.value)}
+                 type="email"
+                 name="user_email"
+                 id="user_email"
+                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                 placeholder="tucorreo@gmail.com"
+                 required=""
                 />
               </div>
               <div>
                 <label
-                  htmlFor="user_password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 htmlFor="user_password"
+                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Contraseña
+                 Contraseña
                 </label>
                 <input
-                  onChange={(e) => setUserPassword(e.target.value)}
-                  type="password"
-                  name="user_password"
-                  id="user_password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
+                 onChange={(e) => setUserPassword(e.target.value)}
+                 type="password"
+                 name="user_password"
+                 id="user_password"
+                 placeholder="••••••••"
+                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                 required=""
                 />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
-                  <div className="flex items-center h-5">
+                 <div className="flex items-center h-5">
                     <input
                       id="remember"
                       aria-describedby="remember"
@@ -95,28 +95,28 @@ function LoginForm() {
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
                       required=""
                     />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
+                 </div>
+                 <div className="ml-3 text-sm">
+                 <label
                       htmlFor="remember"
                       className="text-gray-500 dark:text-gray-300"
                     >
-                      Recuerdame
+                      Recuérdame
                     </label>
-                  </div>
+                 </div>
                 </div>
                 <a
-                  href="#"
-                  className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                 href="#"
+                 className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >
-                  Olvidaste tu contraseña?
+                 Olvidaste tu contraseña?
                 </a>
               </div>
               <button
                 type="submit"
                 disabled={!user_email || !user_password}
                 className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
-                  user_email && user_password
+                 user_email && user_password
                     ? "bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     : "bg-gray-400 pointer-events-none"
                 }`}
@@ -124,20 +124,20 @@ function LoginForm() {
                 Iniciar Sesión
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                No posees una cuenta?{" "}
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                >
-                  Registrate
-                </a>
-              </p>
+      ¿No posees una cuenta?{" "}
+      <button
+        onClick={() => setShowRegistration(true)}
+        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+      >
+        Registrate
+      </button>
+    </p>
             </form>
           </div>
         </div>
       </div>
     </section>
-  );
+ );
 }
 
 export default LoginForm;
