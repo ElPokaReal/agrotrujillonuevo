@@ -34,8 +34,12 @@ const Creditos = {
     const query = 'SELECT id_rubro FROM rubros WHERE nombre_rubro = $1';
     const values = [nombre];
     const result = await pool.query(query, values);
+    if (!result.rows[0]) {
+       throw new Error(`No se encontró ningún rubro con el nombre ${nombre}`);
+    }
     return result.rows[0].id_rubro;
-  },
+   },
+   
   
   async filtrarCreditosPorTipo(tipo) {
     const id_rubro = await this.obtenerIdRubroPorNombre(tipo);
@@ -100,11 +104,11 @@ const Creditos = {
   },
 
   async ObtenerCreditoCedula(tipo, cedula_productor) {
-const query = `SELECT * FROM creditos INNER JOIN productores ON creditos.cedula_productor = productores.cedula_productor
-              INNER JOIN rubros ON productores.id_rubro = rubros.id_rubro WHERE rubros.id_rubro = $1 AND creditos.cedula_productor = $2`;
+    const query = `SELECT * FROM creditos INNER JOIN productores ON creditos.cedula_productor = productores.cedula_productor
+                   INNER JOIN rubros ON productores.id_rubro = rubros.id_rubro WHERE rubros.id_rubro = $1 AND creditos.cedula_productor = $2`;
     const values = [tipo, cedula_productor];
     return pool.query(query, values);
-  },
+   },
 
   async ObtenerHorticolaCedula(cedula_productor) {
     const query = `SELECT * FROM horticola INNER JOIN productores ON horticola.cedula_productor = productores.cedula_productor WHERE horticola.cedula_productor = $1`;

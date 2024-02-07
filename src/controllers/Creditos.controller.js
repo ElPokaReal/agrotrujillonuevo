@@ -1,17 +1,18 @@
 const Creditos = require('../models/Creditos');
 
-const obtenerCreditosProductores = async (req, res) => {
+const obtenerCreditosPorTipo = async (req, res) => {
   try {
-    const creditos = await Creditos.obtenerCreditosProductores();
-    if (creditos.length === 0) {
-      return res.json({ message: 'No hay creditos registrados' });
-    }
-
-res.json({creditos});
+     const tipo = req.params.tipo;
+     const creditos = await Creditos.filtrarCreditosPorTipo(tipo);
+     if (creditos.length === 0) {
+       return res.json({ message: 'No hay creditos registrados para este tipo' });
+     }
+     res.json({creditos});
   } catch (error) {
-    res.status(500).json({ error: error.message });
+     res.status(500).json({ error: error.message });
+     0
   }
-};
+ };
 
 const agregarCreditoAProductor = async (req, res) => {
     try {
@@ -24,6 +25,8 @@ const agregarCreditoAProductor = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 const editarCreditoDeProductor = async (req, res) => {
     try {
@@ -101,7 +104,7 @@ const ObtenerPorTipo = async (req, res, next) => {
   if (req.params.tipo === 'horticola') {
     return obtenerHorticolasProductores(req, res);
   } else {
-    return obtenerCreditosProductores(req, res);
+    return obtenerCreditosPorTipo(req, res);
   }
 };
 

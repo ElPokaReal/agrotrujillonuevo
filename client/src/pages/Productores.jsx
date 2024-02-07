@@ -140,7 +140,7 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
 
   return (
     <>
-       <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-slate-400">
+       <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-slate-200">
          Listado de Productores
        </h1>
        <div className="mt-2">
@@ -185,11 +185,24 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
        productor.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
        productor.cedula_productor.toString().includes(searchTerm)
      )
-     .map((productor) => (
+     .map((productor) => ({
+      ...productor,
+      nombres: productor.nombres.toUpperCase(),
+      apellidos: productor.apellidos.toUpperCase(),
+      cedula_productor: productor.cedula_productor.toString().toUpperCase(),
+      numero_telefonico: productor.numero_telefonico.toUpperCase(),
+      municipio: productor.municipio.toUpperCase(),
+      parroquia: productor.parroquia.toUpperCase(),
+      sector: productor.sector.toUpperCase(),
+      nombre_granja: productor.nombre_granja.toUpperCase(),
+      nombre_rubro: productor.nombre_rubro.toUpperCase(),
+      nombre_status: productor.nombre_status.toUpperCase(),
+   }))
+   .map((productor) => (
        <TableRow
          key={productor.cedula_productor}
          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-       >
+       >  
                 <TableCell style={{ padding: '10px' }} component="th" scope="row">
                  {productor.nombres}
                 </TableCell>
