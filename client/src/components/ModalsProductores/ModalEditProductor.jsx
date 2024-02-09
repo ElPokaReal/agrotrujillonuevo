@@ -37,19 +37,27 @@ function ModalEditProductor({ open, handleClose, editProductor, productorToEdit 
     };
 
     useEffect(() => {
-      if (productorToEdit) {
-        fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${productorToEdit.cedula_productor}`, {
-          credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => {
-            setProductor(data);
-        })
-        .catch(error => {
-            console.error("Hubo un error obteniendo los datos del productor", error);
-        });
-}
-}, [productorToEdit]);
+        if (productorToEdit) {
+          const token = localStorage.getItem('token'); // Asumiendo que el token se guarda en localStorage
+          fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${productorToEdit.cedula_productor}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`, // Incluye el token en la cabecera de autorización
+            },
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Respuesta no autorizada');
+            }
+            return response.json();
+          })
+          .then(data => {
+              setProductor(data);
+          })
+          .catch(error => {
+              console.error("Hubo un error obteniendo los datos del productor", error);
+          });
+        }
+      }, [productorToEdit]);
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>

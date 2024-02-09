@@ -11,6 +11,7 @@ const getAllProductores = async (req, res) => {
   
   const getProductorByCedula = async (req, res) => {
     try {
+      console.log(req.params.cedula_productor); // Agrega esta línea para depurar
       const productor = await Productor.findByProductorCedula(req.params.cedula_productor);
       if (!productor) {
         res.status(404).json({ message: 'Productor no encontrado' });

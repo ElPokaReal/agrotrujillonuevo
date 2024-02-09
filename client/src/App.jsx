@@ -14,8 +14,16 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(null);
 
   React.useEffect(() => {
-    // Realiza la verificación de autenticación aquí
-    fetch('http://localhost:3000/isAuthenticated', { credentials: 'include' })
+    // Obtener el token del almacenamiento local
+    const token = localStorage.getItem('token');
+  
+    // Verificar si el token existe antes de hacer la solicitud
+    if (token) {
+      fetch('http://localhost:3000/isAuthenticated', {
+        headers: {
+          'Authorization': `Bearer ${token}` // Enviar el token en el encabezado Authorization
+        }
+      })
       .then(response => response.json())
       .then(data => {
         setIsAuthenticated(data.isAuthenticated);
@@ -23,6 +31,10 @@ function App() {
       .catch(error => {
         console.error('Error al verificar la autenticación:', error);
       });
+    } else {
+      // Si no hay token, asumir que el usuario no está autenticado
+      setIsAuthenticated(false);
+    }
   }, []);
 
   return (

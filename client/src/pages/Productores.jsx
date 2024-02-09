@@ -32,16 +32,19 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
  }));
 
  const getProductores = async () => {
-   try {
-      const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      setProductores(data);
-   } catch (error) {
-      console.error("Error al obtener los productores:", error);
-   }
- };
+  try {
+    const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
+    const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}`, {
+      headers: {
+        'Authorization': `Bearer ${token}` // Agregar el token en el encabezado Authorization
+      }
+    });
+    const data = await response.json();
+    setProductores(data);
+  } catch (error) {
+    console.error("Error al obtener los productores:", error);
+  }
+};
 
  useEffect(() => {
    getProductores();
@@ -52,10 +55,13 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
  };
 
  const handleDelete = (cedula_productor) => {
-    fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${cedula_productor}`, {
-      method: 'DELETE',
-      credentials: 'include'
-     })
+  const token = localStorage.getItem('token');
+  fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${cedula_productor}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
       .then((response) => response.json())
       .then((data) => {
         setProductores(
@@ -72,15 +78,16 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
  };
 
  const handleAddProductor = async (productorData) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productorData),
-      });
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(productorData),
+    });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -97,14 +104,15 @@ const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
 
  const handleEditProductor = async (updatedProductor) => {
   try {
-     const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${updatedProductor.cedula_productor}`, {
-       method: 'PUT',
-       credentials: 'include',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify(updatedProductor),
-     });
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${updatedProductor.cedula_productor}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(updatedProductor),
+    });
  
      if (!response.ok) {
        throw new Error(`HTTP error! status: ${response.status}`);

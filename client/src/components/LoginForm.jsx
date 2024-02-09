@@ -8,33 +8,34 @@ function LoginForm({setShowRegistration}) {
  const navigate = useNavigate();
 
  const handleSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_email,
-          user_password,
-        }),
-        credentials: "include",
-      });
+  try {
+    const response = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_email,
+        user_password,
+      }),
+    });
 
-      if (response.ok) {
-        console.log("Inicio de sesión exitoso");
-        toast.success("Inicio de sesión exitoso");
-        navigate("/dashboard");
-      } else {
-        console.log("Error al iniciar sesión");
-        toast.error("Error al iniciar sesión");
-      }
-    } catch (error) {
-      console.log("Error al iniciar sesión", error);
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("token", data.token); // Guardar el token en el almacenamiento local
+      console.log("Inicio de sesión exitoso");
+      toast.success("Inicio de sesión exitoso");
+      navigate("/dashboard");
+    } else {
+      console.log("Error al iniciar sesión");
+      toast.error("Error al iniciar sesión");
     }
- };
+  } catch (error) {
+    console.log("Error al iniciar sesión", error);
+  }
+};
 
  return (
     <section className="bg-gray-50 dark:bg-gray-900 h-screen">

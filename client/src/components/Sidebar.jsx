@@ -7,22 +7,21 @@ import { MdDashboard, MdEngineering } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 
 const Sidebar = ({setIsAuthenticated}) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await fetch("http://localhost:3000/logout", {
-        method: "GET",
-        credentials: "include", // Esto es importante para que las cookies se envíen correctamente
-      });
-      setIsAuthenticated(false);
-      navigate("/"); // Redirige al usuario a la página de inicio de sesión
-      toast.success('Cierre de Sesión exitoso')
-    } catch (error) {
-      console.error("Error al cerrar sesión", error);
-    }
+  const handleLogout = () => {
+    // Eliminar el token del almacenamiento local
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  
+    // Usar un callback con navigate para asegurar que se ejecute después de actualizar el estado
+    setTimeout(() => {
+      navigate("/");
+    }, 100); // Un pequeño retraso puede ayudar a asegurar que el estado se actualice correctamente antes de la navegación
+  
+    toast.success('Cierre de Sesión exitoso');
   };
 
   const Menus = [

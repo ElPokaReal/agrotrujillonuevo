@@ -23,8 +23,11 @@ const TablaCreditos = ({ tipo }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/creditos/${tipo}`, {
-         credentials: 'include'
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
         });
         const data = await response.json();
         console.log(data);
@@ -33,7 +36,7 @@ const TablaCreditos = ({ tipo }) => {
         console.error('Error fetching data: ', error);
       }
     };
- 
+  
     fetchData();
   }, [tipo]);
 

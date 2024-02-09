@@ -2,7 +2,7 @@ import React from 'react'
 
 function Dashboard() {
   return (
-    <div>Página principal</div>
+    <div className='dark:text-white'>Página principal</div>
   )
 }
 

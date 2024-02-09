@@ -17,7 +17,7 @@ export default function Creditos() {
     pollo: <TablaCreditosTipo />,
     cerdo: <TablaCreditosTipo />,
     gallina: <TablaCreditosTipo />,
-    horticola: <TablaCreditosTipo />,
+    horticola: <TablaHorticola />,
   };
 
   return (

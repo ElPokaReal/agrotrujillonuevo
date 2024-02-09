@@ -7,34 +7,33 @@ function RegisterForm({ setShowRegistration }) {
  const [user_password, setUserPassword] = useState("");
 
  const handleRegisterSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_name,
-          user_email,
-          user_password
-        }),
-        credentials: "include",
-      });
+  try {
+    const response = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_name,
+        user_email,
+        user_password
+      }),
+    });
 
-      if (response.ok) {
-        console.log("Registro exitoso");
-        toast.success("Registro exitoso");
-        setShowRegistration(false);
-      } else {
-        console.log("Error al registrarse");
-        toast.error("Error al registrarse");
-      }
-    } catch (error) {
-      console.log("Error al registrarse", error);
+    if (response.ok) {
+      console.log("Registro exitoso");
+      toast.success("Registro exitoso");
+      setShowRegistration(false);
+    } else {
+      console.log("Error al registrarse");
+      toast.error("Error al registrarse");
     }
- };
+  } catch (error) {
+    console.log("Error al registrarse", error);
+  }
+};
 
  return (
     <section className="bg-gray-50 dark:bg-gray-900 h-screen">
