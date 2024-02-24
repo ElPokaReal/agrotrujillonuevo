@@ -28,7 +28,7 @@ function ProtectedRoute({ children }) {
           toast.error('Debes iniciar sesión para ver esta página', {
             toastId: 'error1'
           });
-          navigate('/login'); // Asegúrate de redirigir a la página de inicio de sesión correcta
+          navigate('/'); // Asegúrate de redirigir a la página de inicio de sesión correcta
         }
       })
       .catch(error => {

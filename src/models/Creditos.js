@@ -3,10 +3,11 @@ const pool = require('../db');
 const Creditos = {
   async obtenerCreditosProductores() {
     const query = `
-      SELECT Pro.*, Cre.*, Ru.* 
-      FROM productores Pro 
-      INNER JOIN creditos Cre ON Pro.cedula_productor = Cre.cedula_productor
-      INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro
+    SELECT Pro.*, Cre.*, Ru.*, Tec.id_tec, CONCAT(Tec.nombres, ' ', Tec.apellidos) AS tecnico_asignado
+    FROM productores Pro  
+    INNER JOIN creditos Cre ON Pro.cedula_productor = Cre.cedula_productor
+    INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro
+    INNER JOIN tecnicos Tec ON Cre.id_tec = Tec.id_tec;
     `;
     const result = await pool.query(query);
     return result.rows;
@@ -44,11 +45,12 @@ const Creditos = {
   async filtrarCreditosPorTipo(tipo) {
     const id_rubro = await this.obtenerIdRubroPorNombre(tipo);
     const query = `
-    SELECT Ru.*, Pro.*, Cr.* 
-    FROM rubros Ru 
+    SELECT Ru.*, Pro.*, Cr.*, CONCAT(Tec.nombres, ' ', Tec.apellidos) AS tecnico_asignado
+    FROM rubros Ru  
     INNER JOIN productores Pro ON Pro.id_rubro = Ru.id_rubro
     INNER JOIN creditos Cr ON Cr.cedula_productor = Pro.cedula_productor
-    WHERE Pro.id_rubro = $1
+    INNER JOIN tecnicos Tec ON Cr.id_tec = Tec.id_tec
+    WHERE Pro.id_rubro = $1;    
     `;
     const values = [id_rubro];
     const result = await pool.query(query, values);
@@ -56,12 +58,13 @@ const Creditos = {
   },
 
   async obtenerHorticolasProductores() {
-    const query = `
-      SELECT Pro.*, Hor.*, Ru.* 
-      FROM productores Pro 
-      INNER JOIN horticola Hor ON Pro.cedula_productor = Hor.cedula_productor
-      INNER JOIN rubros Ru ON Pro.id_rubro = 3
-    `;
+    const query = `SELECT Ru.*, Pro.*, Hor.*, CONCAT(Tec.nombres, ' ', Tec.apellidos) AS tecnico_asignado
+    FROM rubros Ru
+    INNER JOIN productores Pro ON Pro.id_rubro = Ru.id_rubro
+    INNER JOIN horticola Hor ON Hor.cedula_productor = Pro.cedula_productor
+    INNER JOIN tecnicos Tec ON Hor.id_tec = Tec.id_tec
+    WHERE Pro.id_rubro =  3;`
+    
     const result = await pool.query(query);
     return result.rows;
   },
@@ -104,16 +107,28 @@ const Creditos = {
   },
 
   async ObtenerCreditoCedula(tipo, cedula_productor) {
-    const query = `SELECT * FROM creditos INNER JOIN productores ON creditos.cedula_productor = productores.cedula_productor
-                   INNER JOIN rubros ON productores.id_rubro = rubros.id_rubro WHERE rubros.id_rubro = $1 AND creditos.cedula_productor = $2`;
+    const query = `
+      SELECT creditos.*, productores.*, rubros.*, CONCAT(tecnicos.nombres, ' ', tecnicos.apellidos) AS tecnico_asignado
+      FROM creditos
+      INNER JOIN productores ON creditos.cedula_productor = productores.cedula_productor
+      INNER JOIN rubros ON productores.id_rubro = rubros.id_rubro
+      INNER JOIN tecnicos ON creditos.id_tec = tecnicos.id_tec
+      WHERE rubros.id_rubro = $1 AND creditos.cedula_productor = $2;
+    `;
     const values = [tipo, cedula_productor];
     return pool.query(query, values);
-   },
+  },
 
   async ObtenerHorticolaCedula(cedula_productor) {
-    const query = `SELECT * FROM horticola INNER JOIN productores ON horticola.cedula_productor = productores.cedula_productor WHERE horticola.cedula_productor = $1`;
+    const query = `
+      SELECT horticola.*, productores.*, CONCAT(tecnicos.nombre, ' ', tecnicos.apellido) AS tecnico_asignado
+      FROM horticola
+      INNER JOIN productores ON horticola.cedula_productor = productores.cedula_productor
+      INNER JOIN tecnicos ON horticola.id_tec = tecnicos.id_tec
+      WHERE horticola.cedula_productor = $1;
+    `;
     const values = [cedula_productor];
     return pool.query(query, values);
-  },
+  }  
 }
 module.exports = Creditos;

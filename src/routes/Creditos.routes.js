@@ -15,7 +15,7 @@ Creditos.post('/creditos/:tipo/', checkAuth, verificarCreditoExistente, Registra
 
 Creditos.post('/creditos/horticola/', checkAuth, verificarHorticolaExistente, RegistrarCreditoPorTipo);
 
-Creditos.delete('/creditos/:cedula_productor', checkAuth, EliminarCreditoPorTipoYCedula);
+Creditos.delete('/creditos/:tipo/:cedula_productor', checkAuth, EliminarCreditoPorTipoYCedula);
 
 Creditos.put('/creditos/:cedula_productor', checkAuth, EditarCreditoPorTipoYCedula)
 

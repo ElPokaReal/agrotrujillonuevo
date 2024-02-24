@@ -10,7 +10,6 @@ const obtenerCreditosPorTipo = async (req, res) => {
      res.json({creditos});
   } catch (error) {
      res.status(500).json({ error: error.message });
-     0
   }
  };
 
@@ -92,8 +91,12 @@ const editarCreditoDeProductor = async (req, res) => {
   
   const obtenerHorticolasProductores = async (req, res) => {
     try {
-      const datos = await Creditos.obtenerHorticolasProductores();
-      res.json(datos.rows);
+      const tipo = req.params.horticola;
+      const datosHorticola = await Creditos.obtenerHorticolasProductores(tipo);
+      if (datosHorticola.length === 0) {
+        return res.json({ message: 'No hay creditos registrados para este horticola' });
+      }
+      res.json({datosHorticola});
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

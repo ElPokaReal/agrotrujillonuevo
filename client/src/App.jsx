@@ -8,6 +8,8 @@ import Productores from "./pages/Productores";
 import Tecnicos from "./pages/Tecnicos";
 import { ToastContainer } from "react-toastify";
 import DashboardLayout from "./layouts/DashboardLayout";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
 
@@ -39,6 +41,7 @@ function App() {
 
   return (
     <>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ToastContainer closeOnClick limit={1} theme="colored"/>
       <Router>
         <Routes>
@@ -49,6 +52,7 @@ function App() {
           <Route path="/tecnicos" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Tecnicos /></DashboardLayout></ProtectedRoute>} />
         </Routes>
       </Router>
+      </LocalizationProvider>
     </>
  );
 }

@@ -5,11 +5,51 @@ import TablaCreditos from "../components/TablaCreditos";
 import TablaHorticola from "../components/TablaHorticola";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Button from "@mui/material/Button";
+import ModalAddCredito from "../components/ModalsCreditos/ModalAddCredito";
+import { toast } from 'react-toastify';
 
 export default function Creditos() {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("bovino");
+  const [openAddCreditoModal, setOpenAddCreditoModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [cedula_productor, setCedulaProductor] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} />;
+  const handleAddCredito = async (creditoData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_CREDITOS_URL}/${opcionSeleccionada}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(creditoData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al agregar crédito');
+      }
+  
+      const data = await response.json();
+      toast.success('Productor añadido exitosamente!');
+      console.log('Crédito agregado exitosamente:', data);
+      handleClose();
+    } catch (error) {
+      toast.warning('Ha ocurrido un error!');
+      console.error('Error al agregar crédito:', error);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+ };
+
+ const handleSearch = (event) => {
+  setSearchTerm(event.target.value);
+};
+
+const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} opcionSeleccionada={opcionSeleccionada} searchTerm={searchTerm} />;
 
   const tablas = {
     bovino: <TablaCreditosTipo />,
@@ -29,6 +69,8 @@ export default function Creditos() {
         <div className="flex items-center space-x-3">
           <input
             type="text"
+            value={searchTerm}
+            onChange={handleSearch}
             placeholder="Buscar estado de Crédito"
             className="block w-full px-5 py-3 text-base text-gray-900 placeholder-gray-500 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:max-w-xs sm:text-sm"
           />
@@ -36,8 +78,8 @@ export default function Creditos() {
             variant="contained"
             color="primary"
             startIcon={<AddCircleOutlineIcon />}
+            onClick={() => setOpenAddCreditoModal(true)}
           >
-            {" "}
             Agregar
           </Button>
           <Select
@@ -56,6 +98,12 @@ export default function Creditos() {
 
         {tablas[opcionSeleccionada]}
       </div>
+      <ModalAddCredito
+        open={openAddCreditoModal}
+        handleClose={() => setOpenAddCreditoModal(false)}
+        addCredito={handleAddCredito}
+        showHorticolaForm={opcionSeleccionada === 'horticola'}
+      />
     </>
   );
 }

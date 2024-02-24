@@ -6,7 +6,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     define: {
-      'process.env.REACT_APP_PRODUCTORES_URL': JSON.stringify(env.REACT_APP_PRODUCTORES_URL)
+      'process.env.REACT_APP_PRODUCTORES_URL': JSON.stringify(env.REACT_APP_PRODUCTORES_URL),
+      'process.env.REACT_APP_CREDITOS_URL': JSON.stringify(env.REACT_APP_CREDITOS_URL)
     },
     plugins: [react()],
   }
