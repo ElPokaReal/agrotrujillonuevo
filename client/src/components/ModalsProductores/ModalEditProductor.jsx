@@ -38,10 +38,10 @@ function ModalEditProductor({ open, handleClose, editProductor, productorToEdit 
 
     useEffect(() => {
         if (productorToEdit) {
-          const token = localStorage.getItem('token'); // Asumiendo que el token se guarda en localStorage
+          const token = localStorage.getItem('token');
           fetch(`${process.env.REACT_APP_PRODUCTORES_URL}/${productorToEdit.cedula_productor}`, {
             headers: {
-              'Authorization': `Bearer ${token}`, // Incluye el token en la cabecera de autorización
+              'Authorization': `Bearer ${token}`,
             },
           })
           .then(response => {

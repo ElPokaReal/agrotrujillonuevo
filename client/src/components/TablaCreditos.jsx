@@ -13,6 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment";
 import ModalDeleteCredito from "../components/ModalsCreditos/ModalDeleteCredito";
 import { toast } from "react-toastify";
+import ModalEditCredito from "./ModalsCreditos/ModdalEditCredito";
 
 const StickyTableContainer = styled(TableContainer)(({ theme }) => ({
   maxHeight: "calc(100vh - 200px)",
@@ -23,8 +24,10 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
   const [datos, setDatos] = useState([]);
   const [open, setOpen] = useState(false);
   const [cedulaProductor, setCedulaProductor] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [creditoEdit, setCreditoEdit] = useState(null);
+  const [credito, setCredito] = useState({});
 
-  
   const getCreditos = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -45,6 +48,37 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
     getCreditos();
   }, [tipo, opcionSeleccionada]);
 
+  const editCredito = async (credito) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${process.env.REACT_APP_CREDITOS_URL}/${credito.tipo}/${credito.cedula_productor}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(credito),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al actualizar el crédito");
+      }
+      toast.success("Datos de Crédito actualizados");
+      getCreditos();
+      setOpenEdit(false);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error al actualizar el crédito");
+    }
+  };
+
+  const handleOpenEditModal = (credito) => {
+    setCreditoEdit(credito); // Establece el crédito que se va a editar
+    setOpenEdit(true); // Abre el modal de edición
+   };
+
   const handleDeleteCredito = (cedula_productor) => {
     const token = localStorage.getItem("token");
     fetch(
@@ -55,7 +89,7 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
           Authorization: `Bearer ${token}`,
         },
       }
-      )
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error al eliminar el crédito");
@@ -67,22 +101,30 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    };
+  };
 
-    const handleOpenDeleteModal = (cedula) => {
+  const handleOpenDeleteModal = (cedula) => {
     console.log("handleOpenDeleteModal called with cedula:", cedula);
     setCedulaProductor(cedula);
     setOpen(true);
   };
 
-  const datosFiltrados = datos ? datos.filter(dato =>
-  dato.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dato.cedula_productor.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : [];
-  
+  const datosFiltrados = datos
+    ? datos.filter(
+        (dato) =>
+          dato.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          dato.cedula_productor.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false); // Cierra el modal de edición
+    setCreditoEdit(null); // Restablece el crédito que se va a editar
+   };
 
   return (
     <>
@@ -104,8 +146,8 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-          {datosFiltrados && datosFiltrados.length >  0 ? (
-  datosFiltrados.map((fila, indice) => (
+            {datosFiltrados && datosFiltrados.length > 0 ? (
+              datosFiltrados.map((fila, indice) => (
                 <TableRow
                   key={indice}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -145,7 +187,10 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
                     {fila.tecnico_asignado}
                   </TableCell>
                   <TableCell style={{ padding: "10px" }} align="center">
-                    <IconButton aria-label="edit">
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => handleOpenEditModal(fila)}
+                    >
                       <EditIcon />
                     </IconButton>
                     <IconButton
@@ -175,6 +220,13 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
         handleDeleteCredito={handleDeleteCredito}
         cedula_productor={cedulaProductor}
       />
+<ModalEditCredito
+ open={openEdit}
+ handleClose={handleCloseEdit}
+ editCredito={editCredito}
+ opcionSeleccionada={opcionSeleccionada}
+ cedula_productor={creditoEdit ? creditoEdit.cedula_productor : ""}
+/>
     </>
   );
 };

@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import { Box, Card, CardContent, Grid, Typography, Button } from '@mui/material';
+import { People, AttachMoney } from '@mui/icons-material';
 
 function Dashboard() {
   return (
-    <div className='dark:text-white'>Página principal</div>
-  )
+    <></>
+ );
 }
-
-export default Dashboard
+export default Dashboard;

@@ -17,6 +17,6 @@ Creditos.post('/creditos/horticola/', checkAuth, verificarHorticolaExistente, Re
 
 Creditos.delete('/creditos/:tipo/:cedula_productor', checkAuth, EliminarCreditoPorTipoYCedula);
 
-Creditos.put('/creditos/:cedula_productor', checkAuth, EditarCreditoPorTipoYCedula)
+Creditos.put('/creditos/:tipo/:cedula_productor', checkAuth, EditarCreditoPorTipoYCedula);
 
 module.exports = Creditos;

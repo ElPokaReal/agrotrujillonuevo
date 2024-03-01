@@ -22,14 +22,17 @@ const Creditos = {
     return pool.query(query, values);
   },
 
-  async editarCreditoDeProductor(credito) {
+  async editarCreditoDeProductor(cedula_productor, credito) {
     const query = `
       UPDATE creditos
       SET fecha = $1, dimension_galpon = $2, cantidad_semovientes = $3, alimentacion_tipo = $4, descripcion = $5, factibilidad = $6, id_tec = $7 WHERE cedula_productor = $8 RETURNING *
     `;
-    const values = [credito.fecha, credito.dimension_galpon, credito.cantidad_semovientes, credito.alimentacion_tipo, credito.descripcion, credito.factibilidad, credito.id_tec, credito.cedula_productor];
-    return pool.query(query, values);
-  },
+    const values = [credito.fecha, credito.dimension_galpon, credito.cantidad_semovientes, credito.alimentacion_tipo, credito.descripcion, credito.factibilidad, credito.id_tec, cedula_productor,];
+    console.log(`Ejecutando consulta con valores: ${values}`);
+    const result = await pool.query(query, values);
+    console.log(`Resultado de la consulta: ${result.rows}`);
+    return result;
+},
 
   async obtenerIdRubroPorNombre(nombre) {
     const query = 'SELECT id_rubro FROM rubros WHERE nombre_rubro = $1';

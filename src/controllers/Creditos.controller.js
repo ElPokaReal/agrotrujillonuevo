@@ -28,24 +28,27 @@ const agregarCreditoAProductor = async (req, res) => {
 
 
 const editarCreditoDeProductor = async (req, res) => {
-    try {
-        const credito = req.body;
-        const updatedCredito = await Creditos.editarCreditoDeProductor(credito);
-
-        if (updatedCredito.rowCount > 0) {
-            res.json({
-                message: 'Productor actualizado exitosamente',
-                data: updatedCredito.rows[0]
-            });
-        } else {
-            res.json({
-                message: 'No se encontró un productor con esa cédula para actualizar',
-            });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+  try {
+       const {tipo, cedula_productor} = req.params;
+       const credito = req.body;
+       console.log(`Editando crédito para tipo: ${tipo} y cédula: ${cedula_productor}`);
+       const updatedCredito = await Creditos.editarCreditoDeProductor(cedula_productor, credito);
+ 
+       if (updatedCredito.rowCount > 0) {
+           res.json({
+               message: 'Productor actualizado exitosamente',
+               data: updatedCredito.rows[0]
+           });
+       } else {
+           res.json({
+               message: 'No se encontró un productor con esa cédula para actualizar',
+           });
+       }
+  } catch (error) {
+       console.error(`Error al editar crédito: ${error.message}`);
+       res.status(500).json({ error: error.message });
+  }
+ };
   
   const eliminarDatosDeCredito = async (req, res) => {
     try {
