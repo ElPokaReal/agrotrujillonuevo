@@ -5,22 +5,25 @@ config();
 
 //* Chequeo de autenticación de Usuarios
 const checkAuth = (req, res, next) => {
-    // Obtener el token del encabezado de autorización
-    const tokenHeader = req.headers.authorization;
-    const token = tokenHeader && tokenHeader.split(' ')[1]; // Extraer el token del encabezado
-
+    const token = req.headers.authorization?.split(' ')[1];
     if (token) {
-        jwt.verify(token, process.env.AGRO_TOKEN, (err, decodedToken) => {
-          if (err) {
-            console.log("Error al verificar el token:", err);
-            return res.status(401).json({ message: "No autorizado" }); // Cambiar a una respuesta JSON
+        jwt.verify(token, process.env.AGRO_TOKEN, async (err, decodedToken) => {
+            if (err) {
+                console.log('No estás autenticado');
+                res.status(401).json({ isAuthenticated: false });
             } else {
-                console.log(decodedToken);
-                next();
+                try {
+                    const user = await User.findByUserId(decodedToken.user_id);
+                    req.user = user;
+                    next();
+                } catch (error) {
+                    console.log('Error fetching user information');
+                    res.status(401).json({ isAuthenticated: false });
+                }
             }
         });
     } else {
-        res.status(401).json({ message: "No autorizado" }); // Cambiar a una respuesta JSON
+        res.status(401).json({ isAuthenticated: false });
     }
 };
 

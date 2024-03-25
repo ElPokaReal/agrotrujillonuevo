@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const { UserLogin_post, UserSignup_post, UserLogout, UserGetusers, UserByID, checkIsAuthenticated, UserLoggedIn } = require('../controllers/AuthUsers.controller');
+const { UserLogin_post, UserSignup_post, UserLogout, UserGetusers, UserByID, checkIsAuthenticated, UserLoggedIn, refreshToken, testToken } = require('../controllers/AuthUsers.controller');
+const { checkAuth } = require('../middlewares/AuthMiddleware');
 
 const AuthUsers = Router();
 
@@ -23,6 +24,11 @@ AuthUsers.get('/isAuthenticated', checkIsAuthenticated);
 
 //Metodo para obtener el usuario logueado
 AuthUsers.get('/loggedInUser', UserLoggedIn);
+
+AuthUsers.post('/refresh-token', checkAuth, refreshToken)
+
+//Eliminar luego...
+AuthUsers.post('/test-token', checkAuth, testToken)
 
 //Exportar Modulo
 module.exports = AuthUsers;

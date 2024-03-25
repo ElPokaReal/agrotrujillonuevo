@@ -4,6 +4,9 @@ const cors = require('cors');
 const AuthUsers = require('./routes/AuthUsers.routes');
 const Productores = require('./routes/Productores.routes');
 const Creditos = require('./routes/Creditos.routes');
+const Stats = require('./routes/Stats.routes');
+const Actions = require('./routes/Actions.routes');
+const Tecnicos = require('./routes/Tecnicos.routes');
 require('dotenv').config();
 
 const app = express();
@@ -28,6 +31,9 @@ app.get('/', (req, res) => {
 app.use(AuthUsers);
 app.use(Productores);
 app.use(Creditos);
+app.use(Stats);
+app.use(Actions);
+app.use(Tecnicos)
 
 //* Ejecución de puerto
 

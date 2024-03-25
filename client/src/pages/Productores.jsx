@@ -177,21 +177,22 @@ export default function Productores() {
           </Button>
         </div>
       </div>
+      <div className="overflow-x-auto">
       <StickyTableContainer component={Paper} className="mt-2">
         <Table sx={{ minWidth: 650 }} stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Nombres</TableCell>
-              <TableCell align="center">Apellidos</TableCell>
-              <TableCell align="center">Cédula</TableCell>
-              <TableCell align="center">Teléfono</TableCell>
-              <TableCell align="center">Municipio</TableCell>
-              <TableCell align="center">Parroquia</TableCell>
-              <TableCell align="center">Sector</TableCell>
-              <TableCell align="center">Granja</TableCell>
-              <TableCell align="center">Tipo de Crédito</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Acciones</TableCell>
+              <TableCell classname="text-sm md:text-base p-2 md:p-4">Nombres</TableCell>
+              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Apellidos</TableCell>
+              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Cédula</TableCell>
+              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Teléfono</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Municipio</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Parroquia</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Sector</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Granja</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Tipo de Crédito</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Status</TableCell>
+              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -286,6 +287,7 @@ export default function Productores() {
           </TableBody>
         </Table>
       </StickyTableContainer>
+      </div>
       <ModalAddProductor
         open={openAddProductorModal}
         handleClose={() => setOpenAddProductorModal(false)}

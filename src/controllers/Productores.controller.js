@@ -1,4 +1,5 @@
 const Productor = require('../models/Productores');
+const Acciones = require('../models/Acciones');
 
 const getAllProductores = async (req, res) => {
     try {
@@ -33,8 +34,9 @@ const getAllProductores = async (req, res) => {
       }
   
       //* Si el productor no está registrado con este número de cédula, continuar con la creación
-      const productor = Productor.create(req.body);
-      res.json(productor);
+      const productor = await Productor.create(req.body);
+      await Acciones.registrarAccion('Productor Registrado', `Se ha registrado un productor con cédula ${cedula}`);
+      res.json(productor); // Envía la respuesta después de registrar la acción
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -49,6 +51,7 @@ const getAllProductores = async (req, res) => {
         res.status(404).json({ message: 'El productor no fue encontrado o no se pudo eliminar' });
         return;
       }
+      await Acciones.registrarAccion('Productor Eliminado', `Se ha eliminado el productor con cédula ${cedula}`);
       res.json({ message: 'Productor eliminado exitosamente' });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -66,6 +69,7 @@ const getAllProductores = async (req, res) => {
       }
   
       const updatedProductor = await Productor.update(req.body);
+      await Acciones.registrarAccion('Productor Actualizado', `Se ha actualizado el productor con cédula ${cedula}`);
       res.json({updatedProductor});
     } catch (error) {
       res.status(500).json({ error: error.message });

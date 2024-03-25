@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const Productor = {
     async create(productor){
-        const query = 'INSERT INTO productores (nombres, apellidos, cedula_productor, numero_telefonico, municipio, parroquia, sector, nombre_granja, id_rubro, id_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *';
+        const query = 'INSERT INTO productores (nombres, apellidos, cedula_productor, numero_telefonico, municipio, parroquia, sector, nombre_granja, id_rubro, id_status, fecha) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now() AT TIME ZONE \'America/Caracas\') RETURNING *';
         const values = [productor.nombres, productor.apellidos, productor.cedula_productor, productor.numero_telefonico, productor.municipio, productor.parroquia, productor.sector, productor.nombre_granja, productor.id_rubro, productor.id_status]
         const result = await pool.query(query, values);
         return result.rows[0];

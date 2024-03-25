@@ -117,7 +117,7 @@ const TablaHorticola = ({ datos = [] }) => {
                   {fila.factibilidad.toUpperCase()}
                 </TableCell>
                 <TableCell style={{ padding: "5px" }} align="center">
-                  {fila.id_tec}
+                  {fila.tecnico_asignado}
                 </TableCell>
                 <TableCell style={{ padding: "5px" }} align="center">
                   <IconButton aria-label="edit">

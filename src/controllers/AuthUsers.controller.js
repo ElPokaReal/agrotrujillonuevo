@@ -30,7 +30,7 @@ const handleErrors = (err) => {
 }
 
 // Asignar una maxAge al token
-const maxAge = 3 * 24 * 60 * 60;
+const maxAge = 1 * 60 * 60 ; // 1 Hora
 const newToken = (user) => {
   return jwt.sign({ user_id: user.user_id, email: user.user_email }, process.env.AGRO_TOKEN, {
     expiresIn: maxAge
@@ -122,6 +122,26 @@ const UserLoggedIn = async (req, res) => {
   }
 };
 
+const refreshToken = (req, res) => {
+  const user = req.user;
+  if (user) {
+    const newToken = jwt.sign({ user_id: user.user_id }, process.env.AGRO_TOKEN, { expiresIn: '1h' });
+    res.json({ token: newToken });
+  } else {
+    res.status(400).json({ error: 'User information is not available' });
+  }
+};
+
+const testToken = (req, res) => {
+  const user = req.user;
+  if (user) {
+    const newtestToken = jwt.sign({ user_id: user.user_id }, process.env.AGRO_TOKEN, { expiresIn: '24h' });
+    res.json({ token: newtestToken, message:'Token de prueba generado' });
+  } else {
+    res.status(400).json({ error: 'User information is not available' });
+  }
+};
+
 module.exports = {
     UserLogin_post,
     UserSignup_post,
@@ -129,5 +149,7 @@ module.exports = {
     UserGetusers,
     UserByID,
     UserLoggedIn,
-    checkIsAuthenticated
-}
+    checkIsAuthenticated,
+    refreshToken,
+    testToken
+  }

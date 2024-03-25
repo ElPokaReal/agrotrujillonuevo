@@ -127,22 +127,22 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
    };
 
   return (
-    <>
+    <div className="overflow-x-auto">
       <StickyTableContainer component={Paper} className="mt-2">
         <Table sx={{ minWidth: 650 }} stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Nombres</TableCell>
-              <TableCell align="center">Apellidos</TableCell>
-              <TableCell align="center">Cédula</TableCell>
-              <TableCell align="center">Fecha</TableCell>
-              <TableCell align="center">Dimensión Galpon</TableCell>
-              <TableCell align="center">Nº Semovientes</TableCell>
-              <TableCell align="center">Alimentación</TableCell>
-              <TableCell align="center">Descripción</TableCell>
-              <TableCell align="center">Factibilidad</TableCell>
-              <TableCell align="center">Técnico Asignado</TableCell>
-              <TableCell align="center">Acciones</TableCell>
+              <TableCell className="text-sm md:text-base">Nombres</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Apellidos</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Cédula</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Fecha</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Dimensión Galpon</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Nº Semovientes</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Alimentación</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Descripción</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Factibilidad</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Técnico Asignado</TableCell>
+              <TableCell className="text-sm md:text-base" align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -227,7 +227,7 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
  opcionSeleccionada={opcionSeleccionada}
  cedula_productor={creditoEdit ? creditoEdit.cedula_productor : ""}
 />
-    </>
+    </div>
   );
 };
 

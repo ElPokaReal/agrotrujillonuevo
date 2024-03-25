@@ -1,4 +1,5 @@
 const Creditos = require('../models/Creditos');
+const Acciones = require('../models/Acciones');
 
 const obtenerCreditosPorTipo = async (req, res) => {
   try {
@@ -16,6 +17,7 @@ const obtenerCreditosPorTipo = async (req, res) => {
 const agregarCreditoAProductor = async (req, res) => {
     try {
         const nuevoCredito = await Creditos.agregarCreditoAProductor(req.body);
+        await Acciones.registrarAccion('Credito Creado', `Crédito para ${req.body.cedula_productor} registrado`);
         res.json({
             message: 'Productor registrado exitosamente',
             data: nuevoCredito.rows[0]
@@ -35,6 +37,8 @@ const editarCreditoDeProductor = async (req, res) => {
        const updatedCredito = await Creditos.editarCreditoDeProductor(cedula_productor, credito);
  
        if (updatedCredito.rowCount > 0) {
+        await Acciones.registrarAccion('Credito Editado', `Crédito para ${cedula_productor} editado`);
+
            res.json({
                message: 'Productor actualizado exitosamente',
                data: updatedCredito.rows[0]
@@ -54,6 +58,9 @@ const editarCreditoDeProductor = async (req, res) => {
     try {
       const cedula_productor = req.params.cedula_productor;
       await Creditos.eliminarDatosDeCredito(cedula_productor);
+
+      await Acciones.registrarAccion('Credito Eliminado', `Crédito para ${cedula_productor} eliminado`);
+
       res.json({ message: 'Credito eliminado' });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -65,6 +72,8 @@ const editarCreditoDeProductor = async (req, res) => {
   const agregarHorticolaAProductor = async (req, res) => {
     try {
       const nuevoDato = await Creditos.agregarHorticolaAProductor(req.body);
+
+      await Acciones.registrarAccion('Credito Creado', `Crédito para ${req.body.cedula_productor} registrado`);
   res.json(nuevoDato.rows[0]);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -76,6 +85,7 @@ const editarCreditoDeProductor = async (req, res) => {
       const cedula_productor = req.params.cedula_productor;
       const datosActualizados = req.body;
       const updatedDato = await Creditos.editarHorticolaDeProductor(cedula_productor, datosActualizados);
+      await Acciones.registrarAccion('Credito Editado', `Crédito para ${cedula_productor} editado`);
       res.json(updatedDato.rows[0]);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -86,6 +96,8 @@ const editarCreditoDeProductor = async (req, res) => {
     try {
       const cedula_productor = req.params.cedula_productor;
       await Creditos.eliminarDatosDeHorticola(cedula_productor);
+      await Acciones.registrarAccion('Credito Eliminado', `Crédito para ${cedula_productor} eliminado`);
+
       res.json({ message: 'Dato horticola eliminado' });
     } catch (error) {
       res.status(500).json({ error: error.message });

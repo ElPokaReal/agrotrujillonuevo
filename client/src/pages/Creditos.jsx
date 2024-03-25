@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TablaCreditos from "../components/TablaCreditos";
@@ -14,6 +14,19 @@ export default function Creditos() {
   const [searchTerm, setSearchTerm] = useState("");
   const [cedula_productor, setCedulaProductor] = useState(null);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const savedOpcionSeleccionada = localStorage.getItem('opcionSeleccionada');
+    if (savedOpcionSeleccionada) {
+      setOpcionSeleccionada(savedOpcionSeleccionada);
+    }
+ }, []);
+
+ const handleOpcionSeleccionadaChange = (event) => {
+  const newOpcionSeleccionada = event.target.value;
+  setOpcionSeleccionada(newOpcionSeleccionada);
+  localStorage.setItem('opcionSeleccionada', newOpcionSeleccionada);
+};
 
   const handleAddCredito = async (creditoData) => {
     try {
@@ -83,10 +96,10 @@ const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} opcionS
             Agregar
           </Button>
           <Select
-            value={opcionSeleccionada}
-            onChange={(e) => setOpcionSeleccionada(e.target.value)}
-            className="bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 rounded-md shadow-sm text-base text-slate-700 dark:text-white h-10 "
-          >
+        value={opcionSeleccionada}
+        onChange={handleOpcionSeleccionadaChange}
+        className="bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 rounded-md shadow-sm text-base text-slate-700 dark:text-white h-10 "
+      >
             <MenuItem value="bovino">Bovino</MenuItem>
             <MenuItem value="cabra">Cabra</MenuItem>
             <MenuItem value="pollo">Pollo</MenuItem>
