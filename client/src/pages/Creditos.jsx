@@ -92,6 +92,7 @@ const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} opcionS
             color="primary"
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => setOpenAddCreditoModal(true)}
+            opcionseleccionada={opcionSeleccionada}
           >
             Agregar
           </Button>
@@ -116,6 +117,7 @@ const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} opcionS
         handleClose={() => setOpenAddCreditoModal(false)}
         addCredito={handleAddCredito}
         showHorticolaForm={opcionSeleccionada === 'horticola'}
+        opcionSeleccionada={opcionSeleccionada}
       />
     </>
   );

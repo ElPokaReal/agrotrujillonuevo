@@ -1,0 +1,633 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.2
+-- Dumped by pg_dump version 16.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: acciones; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.acciones (
+    id integer NOT NULL,
+    tipo_accion character varying(255) NOT NULL,
+    descripcion text NOT NULL,
+    fecha timestamp with time zone DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'America/Caracas'::text)
+);
+
+
+ALTER TABLE public.acciones OWNER TO postgres;
+
+--
+-- Name: acciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.acciones_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.acciones_id_seq OWNER TO postgres;
+
+--
+-- Name: acciones_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.acciones_id_seq OWNED BY public.acciones.id;
+
+
+--
+-- Name: creditos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.creditos (
+    id integer NOT NULL,
+    cedula_productor character varying(8) NOT NULL,
+    fecha date,
+    dimension_galpon character varying(40),
+    cantidad_semovientes character varying(25),
+    alimentacion_tipo character varying(255),
+    descripcion character varying(50),
+    factibilidad character varying(50),
+    id_tec integer
+);
+
+
+ALTER TABLE public.creditos OWNER TO postgres;
+
+--
+-- Name: creditos_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.creditos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.creditos_id_seq OWNER TO postgres;
+
+--
+-- Name: creditos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.creditos_id_seq OWNED BY public.creditos.id;
+
+
+--
+-- Name: horticola_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.horticola_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.horticola_id_seq OWNER TO postgres;
+
+--
+-- Name: horticola; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.horticola (
+    id integer DEFAULT nextval('public.horticola_id_seq'::regclass) NOT NULL,
+    cedula_productor character varying(8) NOT NULL,
+    fecha date,
+    n_hectareas character varying(255),
+    n_h_sembradas character varying(255),
+    rubros_est character varying(255),
+    tipo_riego character varying(255),
+    semillas character varying(255),
+    insumos character varying(255),
+    implementos character varying(255),
+    factibilidad character varying(255),
+    id_tec integer NOT NULL
+);
+
+
+ALTER TABLE public.horticola OWNER TO postgres;
+
+--
+-- Name: productores; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.productores (
+    id integer NOT NULL,
+    nombres character varying(255) NOT NULL,
+    apellidos character varying(255) NOT NULL,
+    cedula_productor character varying(9) NOT NULL,
+    numero_telefonico character varying(12) NOT NULL,
+    municipio character varying(255) NOT NULL,
+    parroquia character varying(255) NOT NULL,
+    sector character varying(255) NOT NULL,
+    nombre_granja character varying(255) NOT NULL,
+    id_rubro integer,
+    id_status integer,
+    fecha timestamp with time zone
+);
+
+
+ALTER TABLE public.productores OWNER TO postgres;
+
+--
+-- Name: productores_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.productores_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.productores_id_seq OWNER TO postgres;
+
+--
+-- Name: productores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.productores_id_seq OWNED BY public.productores.id;
+
+
+--
+-- Name: rubros; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.rubros (
+    id_rubro integer NOT NULL,
+    nombre_rubro character varying(255)
+);
+
+
+ALTER TABLE public.rubros OWNER TO postgres;
+
+--
+-- Name: rubros_id_rubro_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.rubros_id_rubro_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.rubros_id_rubro_seq OWNER TO postgres;
+
+--
+-- Name: rubros_id_rubro_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rubros_id_rubro_seq OWNED BY public.rubros.id_rubro;
+
+
+--
+-- Name: status; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.status (
+    id_status integer NOT NULL,
+    nombre_status character varying(20)
+);
+
+
+ALTER TABLE public.status OWNER TO postgres;
+
+--
+-- Name: status_id_status_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.status_id_status_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.status_id_status_seq OWNER TO postgres;
+
+--
+-- Name: status_id_status_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.status_id_status_seq OWNED BY public.status.id_status;
+
+
+--
+-- Name: tecnicos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.tecnicos (
+    id_tec integer NOT NULL,
+    nombres character varying(255),
+    apellidos character varying(255),
+    cedula character varying(8)
+);
+
+
+ALTER TABLE public.tecnicos OWNER TO postgres;
+
+--
+-- Name: tecnicos_id_tec_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+DO $ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'public') THEN EXECUTE 'CREATE SEQUENCE public'; END IF; END $;.tecnicos_id_tec_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tecnicos_id_tec_seq OWNER TO postgres;
+
+--
+-- Name: tecnicos_id_tec_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tecnicos_id_tec_seq OWNED BY public.tecnicos.id_tec;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE IF NOT EXISTS public.users (
+    user_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    user_name character varying(255) NOT NULL,
+    user_email character varying(255) NOT NULL,
+    user_password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: acciones id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.acciones ALTER COLUMN id SET DEFAULT nextval('public.acciones_id_seq'::regclass);
+
+
+--
+-- Name: creditos id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.creditos ALTER COLUMN id SET DEFAULT nextval('public.creditos_id_seq'::regclass);
+
+
+--
+-- Name: productores id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.productores ALTER COLUMN id SET DEFAULT nextval('public.productores_id_seq'::regclass);
+
+
+--
+-- Name: rubros id_rubro; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rubros ALTER COLUMN id_rubro SET DEFAULT nextval('public.rubros_id_rubro_seq'::regclass);
+
+
+--
+-- Name: status id_status; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.status ALTER COLUMN id_status SET DEFAULT nextval('public.status_id_status_seq'::regclass);
+
+
+--
+-- Name: tecnicos id_tec; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tecnicos ALTER COLUMN id_tec SET DEFAULT nextval('public.tecnicos_id_tec_seq'::regclass);
+
+
+--
+-- Data for Name: acciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.acciones (id, tipo_accion, descripcion, fecha) FROM stdin;
+2	Productor Registrado	Se ha registrado un productor con cédula 11619118	2024-03-22 18:45:44.943041-04
+3	Productor Eliminado	Se ha eliminado el productor con cédula 11619118	2024-03-22 19:44:52.91573-04
+4	Productor Registrado	Se ha registrado un productor con cédula 11619118	2024-03-22 19:59:58.856243-04
+5	Productor Actualizado	Se ha actualizado el productor con cédula 11619118	2024-03-23 13:07:08.904653-04
+6	Credito Creado	Crédito para 11619118 registrado	2024-03-23 13:10:09.991077-04
+7	Productor Eliminado	Se ha eliminado el productor con cédula 11619118	2024-03-23 13:34:25.147296-04
+8	Productor Registrado	Se ha registrado un productor con cédula 30140796	2024-03-23 14:21:35.965368-04
+9	Productor Eliminado	Se ha eliminado el productor con cédula 30140796	2024-04-05 20:56:02.876509-04
+10	Productor Registrado	Se ha registrado un productor con cédula 30140796	2024-04-07 12:55:23.742018-04
+11	Credito Creado	Crédito para 30140796 registrado	2024-04-07 12:55:42.119087-04
+12	Productor Registrado	Se ha registrado un productor con cédula 11619118	2024-04-07 13:05:56.171862-04
+13	Credito Creado	Crédito para 11619118 registrado	2024-04-07 13:06:13.933064-04
+14	Credito Editado	Crédito para 11619118 editado	2024-04-11 16:26:39.652427-04
+15	Credito Editado	Crédito para 11619118 editado	2024-04-11 16:39:46.623068-04
+16	Credito Editado	Crédito para 11619118 editado	2024-04-11 16:39:51.765599-04
+17	Credito Editado	Crédito para 11619118 editado	2024-04-11 16:39:56.232568-04
+18	Credito Eliminado	Crédito para 11619118 eliminado	2024-04-21 18:18:14.289393-04
+19	Credito Creado	Crédito para 11619118 registrado	2024-04-27 15:32:21.362739-04
+20	Credito Eliminado	Crédito para 11619118 eliminado	2024-04-28 12:45:57.902303-04
+21	Productor Eliminado	Se ha eliminado el productor con cédula 11619118	2024-04-28 12:46:18.042505-04
+\.
+
+
+--
+-- Data for Name: creditos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.creditos (id, cedula_productor, fecha, dimension_galpon, cantidad_semovientes, alimentacion_tipo, descripcion, factibilidad, id_tec) FROM stdin;
+\.
+
+
+--
+-- Data for Name: horticola; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.horticola (id, cedula_productor, fecha, n_hectareas, n_h_sembradas, rubros_est, tipo_riego, semillas, insumos, implementos, factibilidad, id_tec) FROM stdin;
+\.
+
+
+--
+-- Data for Name: productores; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.productores (id, nombres, apellidos, cedula_productor, numero_telefonico, municipio, parroquia, sector, nombre_granja, id_rubro, id_status, fecha) FROM stdin;
+\.
+
+
+--
+-- Data for Name: rubros; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.rubros (id_rubro, nombre_rubro) FROM stdin;
+1	bovino
+2	cabra
+3	horticola
+4	pollo
+5	gallina
+6	cerdo
+\.
+
+
+--
+-- Data for Name: status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.status (id_status, nombre_status) FROM stdin;
+1	ACTIVO
+2	PENDIENTE
+3	INACTIVO
+\.
+
+
+--
+-- Data for Name: tecnicos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tecnicos (id_tec, nombres, apellidos, cedula) FROM stdin;
+18	SAMUEL DAVID	ARANGUREN MOLINA	30140796
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, user_name, user_email, user_password) FROM stdin;
+b031ce62-f636-47ea-a478-2ea123b2e84c	samuel	samuel@gmail.com	$2a$10$bNs/f/2ZJABO0GVdz6FRjOghpN6./MnMQiruwrmeVBLHqTrPBihPq
+c5116159-3b97-46b8-86ea-7483fe400faa	samuelito	samueloooon@gmail.com	$2a$10$8CR8FgGwhUDDqR01pMjD2OW0Z8NxgT0cyAQ02bTKbCbRyhWVwiGU2
+fe4e789f-e2e1-4ddf-84c6-87fec5976bfe	Samuelin	therealpoka211@gmail.com	$2a$10$xmyVGXPTm7O8WPhHGv2pY.0Wy76EeFnv4gIdYxl2yFwdqFnCYDXRC
+cbaf347c-50ef-44fa-a147-bfd2fd17b552	jose	josean@gmail.com	$2a$10$75myBnfJMrvn8QpBPsrFG.qMO8i0NS6G61wP2fz5jneN/qL6DT5bi
+545d6924-993d-4bb0-a498-da8f937ac8c5	admin	admin@gmail.com	$2a$10$KupddUCd.1yrcSqK.YwAZOEyg7XQfDRBrdnabMG9BFtweZeICGXSy
+062a831c-9366-4f55-91fa-36860eaef6cf	admin1	admin1@gmail.com	$2a$10$RggrW8h6oklI9Ji4MKsFy.t7FHSvyAn3npFQFE0nPWb1HutLOtpsS
+\.
+
+
+--
+-- Name: acciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.acciones_id_seq', 21, true);
+
+
+--
+-- Name: creditos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.creditos_id_seq', 64, true);
+
+
+--
+-- Name: horticola_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.horticola_id_seq', 26, true);
+
+
+--
+-- Name: productores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.productores_id_seq', 76, true);
+
+
+--
+-- Name: rubros_id_rubro_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.rubros_id_rubro_seq', 1, false);
+
+
+--
+-- Name: status_id_status_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.status_id_status_seq', 1, true);
+
+
+--
+-- Name: tecnicos_id_tec_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tecnicos_id_tec_seq', 18, true);
+
+
+--
+-- Name: acciones acciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.acciones
+    ADD CONSTRAINT acciones_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: creditos cedula_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.creditos
+    ADD CONSTRAINT cedula_unique UNIQUE (cedula_productor);
+
+
+--
+-- Name: creditos creditos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.creditos
+    ADD CONSTRAINT creditos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: creditos creditos_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.creditos
+    ADD CONSTRAINT creditos_unique UNIQUE (cedula_productor);
+
+
+--
+-- Name: horticola horticola_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horticola
+    ADD CONSTRAINT horticola_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: productores productores_cedula_productor_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.productores
+    ADD CONSTRAINT productores_cedula_productor_key UNIQUE (cedula_productor);
+
+
+--
+-- Name: productores productores_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.productores
+    ADD CONSTRAINT productores_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rubros rubros_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rubros
+    ADD CONSTRAINT rubros_pkey PRIMARY KEY (id_rubro);
+
+
+--
+-- Name: status status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.status
+    ADD CONSTRAINT status_pkey PRIMARY KEY (id_status);
+
+
+--
+-- Name: tecnicos tecnicos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tecnicos
+    ADD CONSTRAINT tecnicos_pkey PRIMARY KEY (id_tec);
+
+
+--
+-- Name: horticola unique_cedula_productor; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horticola
+    ADD CONSTRAINT unique_cedula_productor UNIQUE (cedula_productor);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: users users_user_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_user_email_key UNIQUE (user_email);
+
+
+--
+-- Name: creditos_cedula_productor_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX creditos_cedula_productor_idx ON public.creditos USING btree (cedula_productor);
+
+
+--
+-- Name: horticola cedula_productorfk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horticola
+    ADD CONSTRAINT cedula_productorfk FOREIGN KEY (cedula_productor) REFERENCES public.productores(cedula_productor) ON DELETE CASCADE;
+
+
+--
+-- Name: creditos fk_creditos_productores; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.creditos
+    ADD CONSTRAINT fk_creditos_productores FOREIGN KEY (cedula_productor) REFERENCES public.productores(cedula_productor);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

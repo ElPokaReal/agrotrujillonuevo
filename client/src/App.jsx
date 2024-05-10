@@ -5,11 +5,11 @@ import MainPage from "./pages/MainPage";
 import Dashboard from "./pages/Dashboard";
 import Creditos from "./pages/Creditos";
 import Productores from "./pages/Productores";
+import Configuracion from "./pages/Configuracion";
 import Tecnicos from "./pages/Tecnicos";
 import { ToastContainer } from "react-toastify";
 import DashboardLayout from "./layouts/DashboardLayout";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import 'react-datepicker/dist/react-datepicker.css';
 
 function App() {
 
@@ -41,7 +41,6 @@ function App() {
 
   return (
     <>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ToastContainer closeOnClick limit={1} theme="colored"/>
       <Router>
         <Routes>
@@ -50,9 +49,9 @@ function App() {
           <Route path="/productores" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Productores /></DashboardLayout></ProtectedRoute>} />
           <Route path="/creditos" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Creditos /></DashboardLayout></ProtectedRoute>} />
           <Route path="/tecnicos" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Tecnicos /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/configuracion" element={<ProtectedRoute><DashboardLayout setIsAuthenticated={setIsAuthenticated}><Configuracion /></DashboardLayout></ProtectedRoute>} />
         </Routes>
       </Router>
-      </LocalizationProvider>
     </>
  );
 }

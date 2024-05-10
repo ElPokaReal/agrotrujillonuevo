@@ -182,17 +182,17 @@ export default function Productores() {
         <Table sx={{ minWidth: 650 }} stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell classname="text-sm md:text-base p-2 md:p-4">Nombres</TableCell>
-              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Apellidos</TableCell>
-              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Cédula</TableCell>
-              <TableCell classname="text-sm md:text-base p-2 md:p-4" align="center">Teléfono</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Municipio</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Parroquia</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Sector</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Granja</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Tipo de Crédito</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Status</TableCell>
-              <TableCell classname="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Acciones</TableCell>
+              <TableCell className="text-sm md:text-base p-2 md:p-4">Nombres</TableCell>
+              <TableCell className="text-sm md:text-base p-2 md:p-4" align="center">Apellidos</TableCell>
+              <TableCell className="text-sm md:text-base p-2 md:p-4" align="center">Cédula</TableCell>
+              <TableCell className="text-sm md:text-base p-2 md:p-4" align="center">Teléfono</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Municipio</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Parroquia</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Sector</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Granja</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Tipo de Crédito</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Status</TableCell>
+              <TableCell className="text-sm md:text-base hidden sm:table-cell p-2 md:p-4" align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

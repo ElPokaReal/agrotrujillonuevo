@@ -226,6 +226,7 @@ const TablaCreditos = ({ tipo, opcionSeleccionada, searchTerm }) => {
  editCredito={editCredito}
  opcionSeleccionada={opcionSeleccionada}
  cedula_productor={creditoEdit ? creditoEdit.cedula_productor : ""}
+
 />
     </div>
   );

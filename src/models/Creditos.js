@@ -7,7 +7,7 @@ const Creditos = {
     FROM productores Pro  
     INNER JOIN creditos Cre ON Pro.cedula_productor = Cre.cedula_productor
     INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro
-    INNER JOIN tecnicos Tec ON Cre.id_tec = Tec.id_tec;
+    LEFT JOIN tecnicos Tec ON Cre.id_tec = Tec.id_tec;
     `;
     const result = await pool.query(query);
     return result.rows;

@@ -9,6 +9,17 @@ const getAllTecnicos = async (req, res) => {
   }
 };
 
+const getTecnicoByID = async (req, res) => {
+  const id_tec = req.params.id_tec;
+
+  try {
+    const getTecnicoByID = await Tecnicos.findByTecnicoId(id_tec);
+    res.json(getTecnicoByID);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const createTecnico = async (req, res) => {
     const cedula = req.body.cedula;
   
@@ -73,5 +84,6 @@ module.exports = {
   getAllTecnicos,
   createTecnico,
   deleteTecnico,
-  updateTecnico
+  updateTecnico,
+  getTecnicoByID
 };

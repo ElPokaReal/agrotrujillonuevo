@@ -76,7 +76,21 @@ const getAllProductores = async (req, res) => {
     }
   };
 
+  const obtenerPorTipo = async (req, res, next) => {
+    try {
+       const tipo = req.params.tipo;
+       const productores = await Productor.findProductoresByRubro(tipo);
+       if (productores.length === 0) {
+         return res.json({ message: 'No hay productores registrados para este tipo' });
+       }
+       res.json({ productores });
+    } catch (error) {
+       res.status(500).json({ error: error.message });
+    }
+   };
+
   module.exports = {
+    obtenerPorTipo,
     getAllProductores,
     getProductorByCedula,
     createProductor,

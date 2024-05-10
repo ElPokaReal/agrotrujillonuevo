@@ -70,33 +70,33 @@ const handleAddProductor = (e) => {
       <DialogTitle>Agregar Productor</DialogTitle>
       <DialogContent>
       <form onSubmit={handleAddProductor}>
-          <Box mb={2}>
-            <TextField label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} fullWidth />
+          <Box mb={2} mt={2}>
+            <TextField label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} fullWidth />
+            <TextField label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} fullWidth required />
           </Box>
           <Box mb={2}>
-            <TextField label="Cédula del productor" value={cedulaProductor} onChange={(e) => setCedulaProductor(e.target.value)} fullWidth />
+            <TextField label="Cédula del productor" value={cedulaProductor} onChange={(e) => setCedulaProductor(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Número de teléfono" value={numeroTelefonico} onChange={(e) => setNumeroTelefonico(e.target.value)} fullWidth />
+            <TextField label="Número de teléfono" value={numeroTelefonico} onChange={(e) => setNumeroTelefonico(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Municipio" value={municipio} onChange={(e) => setMunicipio(e.target.value)} fullWidth />
+            <TextField label="Municipio" value={municipio} onChange={(e) => setMunicipio(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Parroquia" value={parroquia} onChange={(e) => setParroquia(e.target.value)} fullWidth />
+            <TextField label="Parroquia" value={parroquia} onChange={(e) => setParroquia(e.target.value)} fullWidth required />
           </Box>
           <Box mb={2}>
-            <TextField label="Sector" value={sector} onChange={(e) => setSector(e.target.value)} fullWidth />
+            <TextField label="Sector" value={sector} onChange={(e) => setSector(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Nombre de la granja" value={nombreGranja} onChange={(e) => setNombreGranja(e.target.value)} fullWidth />
+            <TextField label="Nombre de la granja" value={nombreGranja} onChange={(e) => setNombreGranja(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
           <FormControl fullWidth>
- <InputLabel id="tipo-credito-label">Tipo de Crédito</InputLabel>
+ <InputLabel id="tipo-credito-label" required>Tipo de Crédito</InputLabel>
  <Select
     labelId="tipo-credito-label"
     value={tipoCredito}

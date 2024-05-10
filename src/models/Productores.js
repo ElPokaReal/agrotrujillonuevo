@@ -33,7 +33,30 @@ const Productor = {
         const query = 'SELECT Pro.*, Ru.*, Stat.* FROM productores Pro INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro INNER JOIN status Stat ON Pro.id_status = Stat.id_status';
         const result = await pool.query(query);
         return result.rows;
-    }
+    },
+
+    async obtenerIdRubroPorNombre(nombre) {
+        const query = 'SELECT id_rubro FROM rubros WHERE nombre_rubro = $1';
+        const values = [nombre];
+        const result = await pool.query(query, values);
+        if (!result.rows[0]) {
+           throw new Error(`No se encontró ningún rubro con el nombre ${nombre}`);
+        }
+        return result.rows[0].id_rubro;
+       },
+       
+       async findProductoresByRubro(tipo) {
+        const id_rubro = await this.obtenerIdRubroPorNombre(tipo);
+        const query = `
+        SELECT Pro.*, Ru.*, Stat.* FROM productores Pro 
+        INNER JOIN rubros Ru ON Pro.id_rubro = Ru.id_rubro 
+        INNER JOIN status Stat ON Pro.id_status = Stat.id_status 
+        WHERE Pro.id_rubro = $1;    
+        `;
+        const values = [id_rubro];
+        const result = await pool.query(query, values);
+        return result.rows;
+       }
 }
 
 module.exports = Productor;

@@ -120,7 +120,8 @@ const DashboardChart = ({ timeframe }) => {
     {noDataMessage ? (
       <div>{noDataMessage}</div>
     ) : (
-      <Line data={chartData} options={options}/>
+<Line key={Date.now()} data={chartData} options={options}/>
+
     )}
   </div>
 );

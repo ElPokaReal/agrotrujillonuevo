@@ -7,6 +7,7 @@ const Creditos = require('./routes/Creditos.routes');
 const Stats = require('./routes/Stats.routes');
 const Actions = require('./routes/Actions.routes');
 const Tecnicos = require('./routes/Tecnicos.routes');
+const Config = require('./routes/Config.routes');
 require('dotenv').config();
 
 const app = express();
@@ -17,7 +18,7 @@ const frontend = process.env.FRONTEND_URL;
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: frontend, // Asegúrate de que esto coincida con el dominio de tu cliente
+    origin: frontend,
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -33,11 +34,12 @@ app.use(Productores);
 app.use(Creditos);
 app.use(Stats);
 app.use(Actions);
-app.use(Tecnicos)
+app.use(Tecnicos);
+app.use(Config);
 
 //* Ejecución de puerto
 
-const port = process.env.SERVER_PORT || 3000; // Añadido un puerto por defecto por si acaso
+const port = process.env.SERVER_PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Servidor en puerto ${port}`);

@@ -5,6 +5,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { FaPerson, FaMoneyCheckDollar } from "react-icons/fa6";
 import { MdDashboard, MdEngineering } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
 
 const Sidebar = ({setIsAuthenticated}) => {
   const [open, setOpen] = useState(false);
@@ -35,6 +36,11 @@ const Sidebar = ({setIsAuthenticated}) => {
       onClick: handleLogout,
       gap: "true",
     },
+    {
+      title: "Configuración",
+      src: <IoMdSettings/>,
+      path: "/configuracion"
+    }
   ];
 
   return (
