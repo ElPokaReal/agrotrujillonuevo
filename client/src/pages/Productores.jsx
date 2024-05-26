@@ -213,8 +213,8 @@ export default function Productores() {
                     .toString()
                     .toUpperCase(),
                   numero_telefonico: productor.numero_telefonico.toUpperCase(),
-                  municipio: productor.municipio.toUpperCase(),
-                  parroquia: productor.parroquia.toUpperCase(),
+                  nombre_municipio: productor.nombre_municipio.toUpperCase(),
+                  nombre_parroquia: productor.nombre_parroquia.toUpperCase(),
                   sector: productor.sector.toUpperCase(),
                   nombre_granja: productor.nombre_granja.toUpperCase(),
                   nombre_rubro: productor.nombre_rubro.toUpperCase(),
@@ -242,10 +242,10 @@ export default function Productores() {
                       {productor.numero_telefonico}
                     </TableCell>
                     <TableCell style={{ padding: "10px" }} align="center">
-                      {productor.municipio}
+                      {productor.nombre_municipio}
                     </TableCell>
                     <TableCell style={{ padding: "10px" }} align="center">
-                      {productor.parroquia}
+                      {productor.nombre_parroquia}
                     </TableCell>
                     <TableCell style={{ padding: "10px" }} align="center">
                       {productor.sector}

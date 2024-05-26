@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,6 +18,8 @@ function ModalAddProductor({ open, handleClose, addProductor }) {
  const [numeroTelefonico, setNumeroTelefonico] = useState('');
  const [municipio, setMunicipio] = useState('');
  const [parroquia, setParroquia] = useState('');
+ const [municipios, setMunicipios] = useState([]);
+ const [parroquias, setParroquias] = useState([]);
  const [sector, setSector] = useState('');
  const [nombreGranja, setNombreGranja] = useState('');
  const [tipoCredito, setTipoCredito] = useState('');
@@ -53,8 +55,8 @@ const handleAddProductor = (e) => {
         apellidos: apellidos.toUpperCase(),
         cedula_productor: cedulaProductor.toUpperCase(),
         numero_telefonico: numeroTelefonico.toUpperCase(),
-        municipio: municipio.toUpperCase(),
-        parroquia: parroquia.toUpperCase(),
+        id_municipio: municipio,
+        id_parroquia: parroquia,
         sector: sector.toUpperCase(),
         nombre_granja: nombreGranja.toUpperCase(),
       id_rubro: tipoCredito,
@@ -64,6 +66,45 @@ const handleAddProductor = (e) => {
     resetForm();
 };
 
+const fetchMunicipios = async () => {
+  try {
+      const response = await fetch('http://localhost:3000/municipios');
+      if (response.ok) {
+        const data = await response.json();
+        setMunicipios(data); // Asegúrate de que 'data' es un array
+    } else {
+        throw new Error('Error al cargar los municipios');
+    }
+} catch (error) {
+    console.error(error);
+}
+};
+
+const fetchParroquias = async (municipioId) => {
+  try {
+      const response = await fetch(`http://localhost:3000/parroquias/${municipioId}`);
+      if (response.ok) {
+          const data = await response.json();
+          setParroquias(data); // Actualiza el estado con la lista de parroquias
+      } else {
+          throw new Error('Error al cargar las parroquias');
+      }
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+useEffect(() => {
+  if (open) {
+      fetchMunicipios();
+  }
+}, [open]);
+
+const handleMunicipioChange = (event) => {
+  const selectedMunicipioId = event.target.value;
+  setMunicipio(selectedMunicipioId); // Guarda el id del municipio
+  fetchParroquias(selectedMunicipioId);
+};
 
  return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -83,11 +124,39 @@ const handleAddProductor = (e) => {
             <TextField label="Número de teléfono" value={numeroTelefonico} onChange={(e) => setNumeroTelefonico(e.target.value)} fullWidth required/>
           </Box>
           <Box mb={2}>
-            <TextField label="Municipio" value={municipio} onChange={(e) => setMunicipio(e.target.value)} fullWidth required/>
-          </Box>
-          <Box mb={2}>
-            <TextField label="Parroquia" value={parroquia} onChange={(e) => setParroquia(e.target.value)} fullWidth required />
-          </Box>
+    <FormControl fullWidth>
+        <InputLabel id="municipio-label">Municipio</InputLabel>
+        <Select
+  labelId="municipio-label"
+  value={municipio} // Este debería ser el id del municipio seleccionado
+  onChange={handleMunicipioChange}
+  required
+>
+  {municipios.map((municipioItem) => (
+    <MenuItem key={municipioItem.id_municipio} value={municipioItem.id_municipio}>
+      {municipioItem.nombre_municipio}
+    </MenuItem>
+  ))}
+</Select>
+    </FormControl>
+</Box>
+<Box mb={2}>
+    <FormControl fullWidth>
+        <InputLabel id="parroquia-label">Parroquia</InputLabel>
+        <Select
+            labelId="parroquia-label"
+            value={parroquia} // Este debería ser el id de la parroquia seleccionada
+            onChange={(e) => setParroquia(e.target.value)} // Aquí se actualiza el estado de la parroquia seleccionada
+            required
+        >
+            {parroquias.map((parroquiaItem) => (
+                <MenuItem key={parroquiaItem.id_parroquia} value={parroquiaItem.id_parroquia}>
+                    {parroquiaItem.nombre_parroquia}
+                </MenuItem>
+            ))}
+        </Select>
+    </FormControl>
+</Box>
           <Box mb={2}>
             <TextField label="Sector" value={sector} onChange={(e) => setSector(e.target.value)} fullWidth required/>
           </Box>

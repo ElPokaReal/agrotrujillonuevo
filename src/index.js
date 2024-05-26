@@ -8,6 +8,7 @@ const Stats = require('./routes/Stats.routes');
 const Actions = require('./routes/Actions.routes');
 const Tecnicos = require('./routes/Tecnicos.routes');
 const Config = require('./routes/Config.routes');
+const Municipio = require('./routes/Municipios.routes');
 require('dotenv').config();
 
 const app = express();
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
     res.json({message: 'Bienvenido a la API de Agrotrujillo'})
 });
 
+app.use(Municipio);
 app.use(AuthUsers);
 app.use(Productores);
 app.use(Creditos);
