@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Typography from '@mui/material/Typography'; // Para mostrar mensajes de error
 
 function ModalAddProductor({ open, handleClose, addProductor }) {
  const [nombres, setNombres] = useState('');
@@ -24,7 +25,8 @@ function ModalAddProductor({ open, handleClose, addProductor }) {
  const [nombreGranja, setNombreGranja] = useState('');
  const [tipoCredito, setTipoCredito] = useState('');
  const [idRubro, setIdRubro] = useState('')
- const [status] = useState('3')
+ const [status] = useState('3');
+ const [errors, setErrors] = useState({}); // Estado para errores
 
 
  const tiposCredito = [
@@ -48,8 +50,43 @@ const resetForm = () => {
     setTipoCredito('');
 };
 
+const validateFields = () => {
+  const regexLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]+$/;
+  const regexNumeros = /^\d{1,8}$/;
+  const regexTelefono = /^\d{11}$/;
+
+  let errors = {};
+
+  if (!regexLetras.test(nombres)) {
+    errors.nombres = 'Por favor ingrese solo letras.';
+  }
+  if (!regexLetras.test(apellidos)) {
+    errors.apellidos = 'Por favor ingrese solo letras.';
+  }
+  if (!regexNumeros.test(cedulaProductor)) {
+    errors.cedulaProductor = 'La cédula debe contener solo números y tener un máximo de 8 dígitos.';
+  }
+  if (!regexTelefono.test(numeroTelefonico)) {
+    errors.numeroTelefonico = 'El número de teléfono debe contener solo números y tener exactamente 11 dígitos.';
+  }
+  if (!regexLetras.test(sector)) {
+    errors.sector = 'Por favor ingrese solo letras.';
+  }
+  if (!regexLetras.test(nombreGranja)) {
+    errors.nombreGranja = 'Por favor ingrese solo letras.';
+  }
+
+  setErrors(errors);
+  return Object.keys(errors).length === 0; // Retorna true si no hay errores
+};
+
 const handleAddProductor = (e) => {
-    e.preventDefault();
+  e.preventDefault();
+
+  if (!validateFields()) {
+    return;
+  }
+
     addProductor({
         nombres: nombres.toUpperCase(),
         apellidos: apellidos.toUpperCase(),
@@ -106,29 +143,33 @@ const handleMunicipioChange = (event) => {
   fetchParroquias(selectedMunicipioId);
 };
 
- return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>Agregar Productor</DialogTitle>
-      <DialogContent>
+return (
+  <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+    <DialogTitle>Agregar Productor</DialogTitle>
+    <DialogContent>
       <form onSubmit={handleAddProductor}>
-          <Box mb={2} mt={2}>
-            <TextField label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} fullWidth required/>
-          </Box>
-          <Box mb={2}>
-            <TextField label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} fullWidth required />
-          </Box>
-          <Box mb={2}>
-            <TextField label="Cédula del productor" value={cedulaProductor} onChange={(e) => setCedulaProductor(e.target.value)} fullWidth required/>
-          </Box>
-          <Box mb={2}>
-            <TextField label="Número de teléfono" value={numeroTelefonico} onChange={(e) => setNumeroTelefonico(e.target.value)} fullWidth required/>
-          </Box>
+        <Box mb={2} mt={2}>
+          <TextField label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} fullWidth required/>
+          {errors.nombres && <Typography color="error">{errors.nombres}</Typography>}
+        </Box>
+        <Box mb={2}>
+          <TextField label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} fullWidth required />
+          {errors.apellidos && <Typography color="error">{errors.apellidos}</Typography>}
+        </Box>
+        <Box mb={2}>
+          <TextField label="Cédula del productor" value={cedulaProductor} onChange={(e) => setCedulaProductor(e.target.value)} fullWidth required/>
+          {errors.cedulaProductor && <Typography color="error">{errors.cedulaProductor}</Typography>}
+        </Box>
+        <Box mb={2}>
+          <TextField label="Número de teléfono" value={numeroTelefonico} onChange={(e) => setNumeroTelefonico(e.target.value)} fullWidth required/>
+          {errors.numeroTelefonico && <Typography color="error">{errors.numeroTelefonico}</Typography>}
+        </Box>
           <Box mb={2}>
     <FormControl fullWidth>
         <InputLabel id="municipio-label">Municipio</InputLabel>
         <Select
   labelId="municipio-label"
-  value={municipio} // Este debería ser el id del municipio seleccionado
+  value={municipio}
   onChange={handleMunicipioChange}
   required
 >
@@ -145,8 +186,8 @@ const handleMunicipioChange = (event) => {
         <InputLabel id="parroquia-label">Parroquia</InputLabel>
         <Select
             labelId="parroquia-label"
-            value={parroquia} // Este debería ser el id de la parroquia seleccionada
-            onChange={(e) => setParroquia(e.target.value)} // Aquí se actualiza el estado de la parroquia seleccionada
+            value={parroquia}
+            onChange={(e) => setParroquia(e.target.value)}
             required
         >
             {parroquias.map((parroquiaItem) => (
@@ -159,9 +200,11 @@ const handleMunicipioChange = (event) => {
 </Box>
           <Box mb={2}>
             <TextField label="Sector" value={sector} onChange={(e) => setSector(e.target.value)} fullWidth required/>
+            {errors.sector && <Typography color="error">{errors.sector}</Typography>}
           </Box>
           <Box mb={2}>
             <TextField label="Nombre de la granja" value={nombreGranja} onChange={(e) => setNombreGranja(e.target.value)} fullWidth required/>
+            {errors.nombreGranja && <Typography color="error">{errors.nombreGranja}</Typography>}
           </Box>
           <Box mb={2}>
           <FormControl fullWidth>

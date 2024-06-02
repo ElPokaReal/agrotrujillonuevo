@@ -24,7 +24,7 @@ const createTecnico = async (req, res) => {
     const cedula = req.body.cedula;
   
     try {
-        const existingTecnico = await Tecnicos.findByTecnicoCedula(cedula);
+        const existingTecnico = await Tecnicos.findByTecnicoId(cedula);
         if (existingTecnico) {
             res.status(400).json({ message: 'El tecnico ya se encuentra registrado' });
             return;

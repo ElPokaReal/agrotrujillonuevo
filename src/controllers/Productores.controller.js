@@ -1,5 +1,9 @@
 const Productor = require('../models/Productores');
 const Acciones = require('../models/Acciones');
+const fs = require("fs");
+const path = require('path');
+const PDFDocument = require('pdfkit-table');
+const moment = require('moment');
 
 const getAllProductores = async (req, res) => {
     try {
@@ -89,11 +93,78 @@ const getAllProductores = async (req, res) => {
     }
    };
 
+   const generarReporteProductores = async (req, res) => {
+    try {
+      const productores = await Productor.getAllProductores();
+  
+      const outputDirectory = path.join(__dirname, '..', '..', 'listado_productores');
+      const currentDate = moment().format('DD_MM_YYYY');
+      const outputFilename = `listado_productores_${currentDate}.pdf`;
+      const outputPath = path.join(outputDirectory, outputFilename);
+  
+      // Crear el directorio de salida si no existe
+      if (!fs.existsSync(outputDirectory)) {
+        fs.mkdirSync(outputDirectory, { recursive: true });
+      }
+  
+      // Preparar el stream de escritura del archivo
+      const stream = fs.createWriteStream(outputPath);
+      const doc = new PDFDocument({ margin: 30, size: 'A4' });
+      doc.pipe(stream);
+  
+      const headerImage = path.join(__dirname, '..', 'public', 'logo.jpg');
+      doc.image(headerImage, {
+        fit: [doc.page.width, 100], // Ajusta el tamaño de la imagen aquí
+        align: 'left',
+        valign: 'top',
+        margin: { top: 0 } // Ajusta el margen superior si es necesario
+      }).moveDown(6);
+
+      // Título del documento
+      doc.fontSize(16).text('LISTADO DE PRODUCTORES', { align: 'center' }).moveDown(2);
+  
+      // Crear la tabla
+      const table = {
+        headers: ['CEDULA', 'NOMBRES', 'APELLIDOS', 'TELÉFONO', 'MUNICIPIO', 'PARROQUIA', 'SECTOR', 'GRANJA', 'TIPO DE CRÉDITO', 'STATUS'],
+        rows: productores.map(productor => [
+          productor.cedula_productor.toUpperCase(),
+          productor.nombres.toUpperCase(),
+          productor.apellidos.toUpperCase(),
+          productor.numero_telefonico.toUpperCase(),
+          productor.nombre_municipio.toUpperCase(),
+          productor.nombre_parroquia.toUpperCase(),
+          productor.sector.toUpperCase(),
+          productor.nombre_granja.toUpperCase(),
+          productor.nombre_rubro.toUpperCase(),
+          productor.nombre_status.toUpperCase(),
+        ]),
+        widths: [100, 200, 200, 150, 150, 150, 150, 150, 150], // Ajusta los anchos de las columnas según sea necesario
+      };
+  
+      // Agregar la tabla al documento
+      doc.table(table, {
+        prepareHeader: () => doc.fontSize(8),
+        prepareRow: (row, i) => doc.fontSize(8)
+      });
+  
+      // Finalizar el documento
+      doc.end();
+  
+      // Enviar el archivo cuando se termine de escribir
+      stream.on('finish', function () {
+        res.status(200).sendFile(outputPath);
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
   module.exports = {
     obtenerPorTipo,
     getAllProductores,
     getProductorByCedula,
     createProductor,
     deleteProductorByCedula,
-    updateProductor
+    updateProductor,
+    generarReporteProductores
   };

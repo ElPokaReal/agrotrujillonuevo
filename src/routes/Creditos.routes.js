@@ -1,11 +1,13 @@
 const { Router } = require ('express');
 const { checkAuth } = require('../middlewares/AuthMiddleware');
-const { ObtenerPorTipo, ObtenerPorCedula, RegistrarCreditoPorTipo, EditarCreditoPorTipoYCedula, EliminarCreditoPorTipoYCedula } = require('../controllers/Creditos.controller');
+const { ObtenerPorTipo, ObtenerPorCedula, RegistrarCreditoPorTipo, EditarCreditoPorTipoYCedula, EliminarCreditoPorTipoYCedula, generarReporteCreditos } = require('../controllers/Creditos.controller');
 const { verificarCreditoExistente, verificarHorticolaExistente } = require('../middlewares/CreditosMiddleware');
 
 const Creditos = Router();
 
 //* Rutas especificas para creditos
+
+Creditos.get('/creditos/reporte/:tipo', checkAuth, generarReporteCreditos);
 
 Creditos.get('/creditos/:tipo', checkAuth, ObtenerPorTipo);
 

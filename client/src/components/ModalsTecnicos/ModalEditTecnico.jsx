@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import DatePicker from "react-datepicker";
+import Typography from "@mui/material/Typography";
 
 function ModalEditTecnico({
   open,
@@ -15,12 +15,7 @@ function ModalEditTecnico({
   tecnicoToEdit,
 }) {
   const [tecnico, setTecnico] = useState(null);
-
-  const handleUpdateTecnico = (e) => {
-    e.preventDefault();
-    editTecnico(tecnico);
-    handleClose();
-  };
+  const [errors, setErrors] = useState({ nombres: '', apellidos: '', cedula: '' }); // Estado para errores
 
   useEffect(() => {
     if (tecnicoToEdit) {
@@ -44,12 +39,49 @@ function ModalEditTecnico({
         })
         .catch((error) => {
           console.error(
-            "Hubo un error obteniendo los datos del productor",
+            "Hubo un error obteniendo los datos del técnico",
             error
           );
         });
     }
   }, [tecnicoToEdit]);
+
+  const validateFields = () => {
+    const regexLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]+$/;
+    const regexNumeros = /^\d{0,8}$/;
+
+    let newErrors = {};
+
+    if (!regexLetras.test(tecnico.nombres) || tecnico.nombres.length < 5) {
+      newErrors.nombres = 'Por favor ingrese solo letras y debe contener al menos 5 caracteres.';
+    }
+    if (!regexLetras.test(tecnico.apellidos) || tecnico.apellidos.length < 5) {
+      newErrors.apellidos = 'Por favor ingrese solo letras y debe contener al menos 5 caracteres.';
+    }
+    if (!regexNumeros.test(tecnico.cedula) || tecnico.cedula.length > 8) {
+      newErrors.cedula = 'La cédula debe contener solo números y tener un máximo de 8 dígitos.';
+    }
+
+    setErrors(newErrors); // Actualiza el estado de errores
+    return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
+  };
+
+  const handleUpdateTecnico = (e) => {
+    e.preventDefault();
+
+    if (!validateFields()) {
+      return;
+    }
+
+    editTecnico({
+      ...tecnico,
+      nombres: tecnico.nombres.toUpperCase(),
+      apellidos: tecnico.apellidos.toUpperCase(),
+      cedula: tecnico.cedula.toUpperCase(),
+    });
+
+    handleClose();
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -60,36 +92,33 @@ function ModalEditTecnico({
             <TextField
               label="Nombres"
               value={tecnico ? tecnico.nombres : ""}
-              onChange={(e) =>
-                setTecnico({ ...tecnico, nombres: e.target.value })
-              }
+              onChange={(e) => setTecnico({ ...tecnico, nombres: e.target.value })}
               fullWidth
+              required
+              error={!!errors.nombres}
+              helperText={errors.nombres}
             />
           </Box>
           <Box mb={2}>
             <TextField
               label="Apellidos"
-              value={
-                tecnico && tecnico.apellidos ? tecnico.apellidos : ""
-              }
-              onChange={(e) =>
-                setTecnico({ ...tecnico, apellidos: e.target.value })
-              }
+              value={tecnico && tecnico.apellidos ? tecnico.apellidos : ""}
+              onChange={(e) => setTecnico({ ...tecnico, apellidos: e.target.value })}
               fullWidth
+              required
+              error={!!errors.apellidos}
+              helperText={errors.apellidos}
             />
           </Box>
           <Box mb={2}>
             <TextField
               label="Cédula del técnico"
-              value={
-                tecnico && tecnico.cedula
-                  ? tecnico.cedula
-                  : ""
-              }
-              onChange={(e) =>
-                setTecnico({ ...tecnico, cedula: e.target.value })
-              }
+              value={tecnico && tecnico.cedula ? tecnico.cedula : ""}
+              onChange={(e) => setTecnico({ ...tecnico, cedula: e.target.value })}
               fullWidth
+              required
+              error={!!errors.cedula}
+              helperText={errors.cedula}
             />
           </Box>
           <Button type="submit" variant="contained" color="success" fullWidth>

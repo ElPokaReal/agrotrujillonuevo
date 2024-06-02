@@ -171,7 +171,7 @@ function ModalAddCredito({
                 dateFormat="dd/MM/yyyy"
                 maxDate={new Date()}
                 customInput={
-                  <TextField value={fecha} fullWidth label="Fecha" rºequired />
+                  <TextField value={fecha} fullWidth label="Fecha" required />
                 }
                 popperClassName="custom-datepicker-popper"
                 p

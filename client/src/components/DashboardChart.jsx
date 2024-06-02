@@ -62,11 +62,13 @@ const DashboardChart = ({ timeframe }) => {
  useEffect(() => {
   const fetchData = async () => {
      try {
-       const creditosRes = await fetch(`http://localhost:3000/stats/creditos/${timeframe}`);
-       const creditosData = await creditosRes.json();
- 
-       const productoresRes = await fetch(`http://localhost:3000/stats/productores/${timeframe}`);
-       const productoresData = await productoresRes.json();
+      const creditosRes = await fetch(`http://localhost:3000/stats/creditos/${timeframe}`);
+      const creditosData = await creditosRes.json();
+      console.log("Creditos Data:", creditosData); // Agrega esta línea
+
+      const productoresRes = await fetch(`http://localhost:3000/stats/productores/${timeframe}`);
+      const productoresData = await productoresRes.json();
+      console.log("Productores Data:", productoresData); // Agrega esta línea
  
         // Formatear las etiquetas según el timeframe
         let labels;
@@ -120,7 +122,7 @@ const DashboardChart = ({ timeframe }) => {
     {noDataMessage ? (
       <div>{noDataMessage}</div>
     ) : (
-<Line key={Date.now()} data={chartData} options={options}/>
+      <Line key={`${Date.now()}-${timeframe}`} data={chartData} options={options}/>
 
     )}
   </div>

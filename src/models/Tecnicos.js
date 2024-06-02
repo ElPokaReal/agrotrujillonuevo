@@ -15,6 +15,13 @@ const Tecnicos = {
         return result.rows[0];
     },
 
+    async findByTecnicoCedula(cedula){ // Añade esta función aquí
+        const query = `SELECT * FROM tecnicos WHERE cedula = $1`;
+        const values = [cedula];
+        const result = await pool.query(query, values);
+        return result.rows[0]; // Devuelve el primer resultado o undefined si no se encontró ninguno
+    },
+
     async create(tecnico){
         const query = 'INSERT INTO tecnicos (nombres, apellidos, cedula) VALUES ($1, $2, $3) RETURNING *';
         const values = [tecnico.nombres, tecnico.apellidos, tecnico.cedula];

@@ -7,6 +7,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Button from "@mui/material/Button";
 import ModalAddCredito from "../components/ModalsCreditos/ModalAddCredito";
 import { toast } from 'react-toastify';
+import { FaRegFilePdf } from "react-icons/fa6";
 
 export default function Creditos() {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("bovino");
@@ -14,6 +15,14 @@ export default function Creditos() {
   const [searchTerm, setSearchTerm] = useState("");
   const [cedula_productor, setCedulaProductor] = useState(null);
   const [open, setOpen] = useState(false);
+
+const getCurrentDateFormatted = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses están indexados desde 0
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
   useEffect(() => {
     const savedOpcionSeleccionada = localStorage.getItem('opcionSeleccionada');
@@ -51,6 +60,35 @@ export default function Creditos() {
     } catch (error) {
       toast.warning('Ha ocurrido un error!');
       console.error('Error al agregar crédito:', error);
+    }
+  };
+
+  const generateReport = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
+      const response = await fetch(`${process.env.REACT_APP_CREDITOS_URL}/reporte/${opcionSeleccionada}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Agregar el token en el encabezado Authorization
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+  
+      const blob = await response.blob();
+      const currentDate = getCurrentDateFormatted(); // Obtiene la fecha actual formateada
+      const fileName = `reporte-creditos-${opcionSeleccionada}-${currentDate}.pdf`; // Usa la opción seleccionada y la fecha actual en el nombre del archivo
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName); // Usa el nombre de archivo con la opción y la fecha
+      document.body.appendChild(link);
+      link.click();
+  
+    } catch (error) {
+      console.error("Error al generar el reporte:", error);
+      toast.error("Hubo un error al generar el reporte.");
     }
   };
 
@@ -108,6 +146,14 @@ const TablaCreditosTipo = () => <TablaCreditos tipo={opcionSeleccionada} opcionS
             <MenuItem value="gallina">Gallina</MenuItem>
             <MenuItem value="horticola">Horticola</MenuItem>
           </Select>
+          <Button
+              variant="contained"
+              color='error'
+              startIcon={<FaRegFilePdf />}
+              onClick={generateReport}
+              >
+                Generar Reporte
+              </Button>
         </div>
 
         {tablas[opcionSeleccionada]}

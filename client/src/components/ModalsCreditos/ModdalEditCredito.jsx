@@ -18,26 +18,25 @@ function ModalEditCredito({
   const [credito, setCredito] = useState({});
   const [tecnicos, setTecnicos] = useState([]);
 
-  useEffect(() =>  {
-    const cargarTecnicos = async () =>{
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_TECNICOS_URL}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log(response);
-        const data = await response.json();
-        setTecnicos(data.tecnicos);
-      } catch (error) {
-        console.error("Error al cargar los técnicos:", error);
-      }
-    };
-    cargarTecnicos();
-  })
+  const getTecnicos = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
+      const response = await fetch(`${process.env.REACT_APP_TECNICOS_URL}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Agregar el token en el encabezado Authorization
+        },
+      });
+      const data = await response.json();
+      setTecnicos(data);
+    } catch (error) {
+      console.error("Error al obtener los tecnicos:", error);
+    }
+  };
+
+  useEffect(() => {
+    getTecnicos();
+  }, []);
+
 
   useEffect(() => {
     if (opcionSeleccionada && cedula_productor) {
@@ -137,15 +136,31 @@ function ModalEditCredito({
             />
           </Box>
           <Box mb={2}>
-            <TextField
-              label="Técnico Asignado"
-              value={credito.id_tec || ""}
-              onChange={(e) =>
-                setCredito({ ...credito, id_tec: e.target.value })
-              }
-              fullWidth
-            />
-          </Box>
+      <TextField
+        select
+        label="Técnico Asignado"
+        value={credito.id_tec || ""}
+        onChange={(e) => {
+          const newIdTec = e.target.value;
+          console.log("Nuevo ID Tec seleccionado:", newIdTec); // Depuración
+          setCredito({...credito, id_tec: newIdTec});
+        }}
+        SelectProps={{
+          native: true,
+       }}
+        fullWidth
+      >
+        {tecnicos && tecnicos.length > 0? (
+          tecnicos.map((tecnico) => (
+            <option key={tecnico.id_tec} value={tecnico.id_tec}>
+              {tecnico.nombres.toUpperCase()} {tecnico.apellidos.toUpperCase()}
+            </option>
+          ))
+        ) : (
+          <option disabled>No hay técnicos disponibles</option>
+        )}
+      </TextField>
+    </Box>  
           <Button type="submit" variant="contained" color="success" fullWidth>
             Actualizar
           </Button>

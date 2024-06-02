@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import Typography from '@mui/material/Typography'; // Para mostrar mensajes de error
 
 function ModalEditProductor({
   open,
@@ -22,6 +23,7 @@ function ModalEditProductor({
   const [parroquias, setParroquias] = useState([]);
   const [selectedMunicipio, setSelectedMunicipio] = useState("");
   const [selectedParroquia, setSelectedParroquia] = useState("");
+  const [errors, setErrors] = useState({}); // Estado para errores
 
   const tiposCredito = [
     { id: 1, nombre: "BOVINO" },
@@ -38,8 +40,43 @@ function ModalEditProductor({
     { id: 3, name: "INACTIVO" },
   ];
 
+  const validateFields = () => {
+    const regexLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]+$/;
+    const regexNumeros = /^\d{1,8}$/;
+    const regexTelefono = /^\d{11}$/;
+  
+    let errors = {};
+  
+    if (!regexLetras.test(productor.nombres)) {
+      errors.nombres = 'Por favor ingrese solo letras.';
+    }
+    if (!regexLetras.test(productor.apellidos)) {
+      errors.apellidos = 'Por favor ingrese solo letras.';
+    }
+    if (!regexNumeros.test(productor.cedula_productor)) {
+      errors.cedulaProductor = 'La cédula debe contener solo números y tener un máximo de 8 dígitos.';
+    }
+    if (!regexTelefono.test(productor.numero_telefonico)) {
+      errors.numeroTelefonico = 'El número de teléfono debe contener solo números y tener exactamente 11 dígitos.';
+    }
+    if (!regexLetras.test(productor.sector)) {
+      errors.sector = 'Por favor ingrese solo letras.';
+    }
+    if (!regexLetras.test(productor.nombre_granja)) {
+      errors.nombreGranja = 'Por favor ingrese solo letras.';
+    }
+  
+    setErrors(errors);
+    return Object.keys(errors).length === 0; // Retorna true si no hay errores
+  };  
+
   const handleUpdateProductor = (e) => {
     e.preventDefault();
+
+    if (!validateFields()) {
+      return;
+    }
+
     editProductor(productor);
     handleClose();
   };
@@ -147,7 +184,8 @@ const handleMunicipioChange = (e) => {
                 setProductor({ ...productor, nombres: e.target.value })
               }
               fullWidth
-            />
+              />
+              {errors.nombres && <Typography color="error">{errors.nombres}</Typography>}
           </Box>
           <Box mb={2}>
             <TextField
@@ -160,6 +198,7 @@ const handleMunicipioChange = (e) => {
               }
               fullWidth
             />
+          {errors.apellidos && <Typography color="error">{errors.apellidos}</Typography>}
           </Box>
           <Box mb={2}>
             <TextField
@@ -174,6 +213,7 @@ const handleMunicipioChange = (e) => {
               }
               fullWidth
             />
+            {errors.cedulaProductor && <Typography color="error">{errors.cedulaProductor}</Typography>}
           </Box>
           <Box mb={2}>
             <TextField
@@ -191,6 +231,7 @@ const handleMunicipioChange = (e) => {
               }
               fullWidth
             />
+            {errors.numeroTelefonico && <Typography color="error">{errors.numeroTelefonicoM}</Typography>}
           </Box>
           <Box mb={2}>
   <FormControl fullWidth>
@@ -241,6 +282,7 @@ const handleMunicipioChange = (e) => {
               }
               fullWidth
             />
+              {errors.sector && <Typography color="error">{errors.sector}</Typography>}
           </Box>
           <Box mb={2}>
             <TextField
@@ -255,6 +297,7 @@ const handleMunicipioChange = (e) => {
               }
               fullWidth
             />
+          {errors.nombreGranja && <Typography color="error">{errors.nombreGranja}</Typography>}
           </Box>
           <Box mb={2}>
             <FormControl fullWidth>

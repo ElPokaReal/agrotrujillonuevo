@@ -1,5 +1,9 @@
 const Creditos = require('../models/Creditos');
 const Acciones = require('../models/Acciones');
+const fs = require("fs");
+const path = require('path');
+const PDFDocument = require('pdfkit-table');
+const moment = require('moment');
 
 const obtenerCreditosPorTipo = async (req, res) => {
   try {
@@ -190,10 +194,113 @@ const EliminarCreditoPorTipoYCedula = async (req, res, next) => {
     }
 };
 
+const generarReporteCreditos = async (req, res) => {
+  try {
+    const tipo = req.params.tipo;
+    let creditos;
+
+    if (tipo === 'horticola') {
+      creditos = await Creditos.obtenerHorticolasProductores(tipo);
+    } else {
+      creditos = await Creditos.filtrarCreditosPorTipo(tipo);
+    }
+
+    if (creditos.length === 0) {
+      return res.json({ message: 'No hay créditos registrados para este tipo' });
+    }
+
+    const outputDirectory = path.join(__dirname, '..', '..', 'reportes_creditos');
+    const currentDate = moment().format('DD_MM_YYYY');
+    const outputFilename = `reporte_creditos_${tipo}_${currentDate}.pdf`;
+    const outputPath = path.join(outputDirectory, outputFilename);
+
+    // Crear el directorio de salida si no existe
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true });
+    }
+
+    // Preparar el stream de escritura del archivo
+    const stream = fs.createWriteStream(outputPath);
+    const doc = new PDFDocument({ margin: 30, size: 'A4' });
+    doc.pipe(stream);
+
+    const headerImage = path.join(__dirname, '..', 'public', 'logo.jpg');
+    doc.image(headerImage, {
+      fit: [doc.page.width, 100], // Ajusta el tamaño de la imagen aquí
+      align: 'left',
+      valign: 'top',
+      margin: { top: 0 } // Ajusta el margen superior si es necesario
+    }).moveDown(6);
+
+    // Título del documento
+    doc.fontSize(16).text(`REPORTE DE CRÉDITOS - ${tipo.toUpperCase()}`, { align: 'center' }).moveDown(2);
+
+    // Crear la tabla
+    const tableHeaders = tipo === 'horticola'? [
+      'NOMBRES', 'APELLIDOS', 'CÉDULA', 'FECHA', 'N° HECTÁREAS', 'N° SEMBRADAS', 'RUBROS EST', 'TIPO DE RIEGO', 'SEMILLAS', 'FACTIBILIDAD', 'TÉCNICO ASIGNADO'
+    ] : [
+      'NOMBRES', 'APELLIDOS', 'CÉDULA', 'FECHA', 'DIMENSIÓN GALPÓN', 'CANTIDAD SEMOVIENTES', 'ALIMENTACIÓN TIPO', 'DESCRIPCIÓN', 'FACTIBILIDAD', 'TÉCNICO ASIGNADO'
+    ];
+
+    const tableRows = creditos.map(credito => {
+      const baseInfo = [
+        credito.nombres.toUpperCase(),
+        credito.apellidos.toUpperCase(),
+        credito.cedula_productor.toUpperCase(),
+        moment(credito.fecha).format('DD/MM/YYYY'),
+      ];
+
+      if (tipo === 'horticola') {
+        return [...baseInfo,
+          credito.n_hectareas.toString(),
+          credito.n_h_sembradas.toString(),
+          credito.rubros_est.toUpperCase(),
+          credito.tipo_riego.toUpperCase(),
+          credito.semillas.toUpperCase(),
+          credito.factibilidad.toUpperCase(),
+          credito.tecnico_asignado.toUpperCase()
+        ];
+      } else {
+        return [...baseInfo,
+          credito.dimension_galpon.toUpperCase(),
+          credito.cantidad_semovientes.toString(),
+          credito.alimentacion_tipo.toUpperCase(),
+          credito.descripcion.toUpperCase(),
+          credito.factibilidad.toUpperCase(),
+          credito.tecnico_asignado.toUpperCase()
+        ];
+      }
+    });
+
+    const table = {
+      headers: tableHeaders,
+      rows: tableRows,
+      widths: [100, 200, 150, 150, 150, 150, 150, 150, 150, 150], // Ajusta los anchos de las columnas según sea necesario
+    };
+
+    // Agregar la tabla al documento
+    doc.table(table, {
+      prepareHeader: () => doc.fontSize(6),
+      prepareRow: (row, i) => doc.fontSize(6)
+    });
+
+    // Finalizar el documento
+    doc.end();
+
+    // Enviar el archivo cuando se termine de escribir
+    stream.on('finish', function () {
+      res.status(200).sendFile(outputPath);
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
     ObtenerPorTipo,
     ObtenerPorCedula,
     RegistrarCreditoPorTipo,
     EditarCreditoPorTipoYCedula,
-    EliminarCreditoPorTipoYCedula
+    EliminarCreditoPorTipoYCedula,
+    generarReporteCreditos
 };

@@ -44,7 +44,7 @@ function LoginForm({setShowRegistration}) {
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          Inicio de Sesión
+          Sistema AGROT
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -85,14 +85,6 @@ function LoginForm({setShowRegistration}) {
                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                  required=""
                 />
-              </div>
-              <div className="flex items-center justify-end">
-                <a
-                 href="#"
-                 className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                >
-                 Olvidaste tu contraseña?
-                </a>
               </div>
               <button
                 type="submit"
