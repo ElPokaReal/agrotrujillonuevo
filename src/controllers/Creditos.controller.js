@@ -31,8 +31,6 @@ const agregarCreditoAProductor = async (req, res) => {
     }
 };
 
-
-
 const editarCreditoDeProductor = async (req, res) => {
   try {
        const {tipo, cedula_productor} = req.params;

@@ -4,14 +4,16 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev:backend": "nodemon src/index.js"
+    "server": "nodemon src/index.js",
+    "cliente": "cd client && npm run dev --prefix",
+    "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run cliente\" "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

@@ -38,23 +38,12 @@ function ModalAddProductor({ open, handleClose, addProductor }) {
     { id: 6, nombre: 'CERDO' },
 ];
 
-const resetForm = () => {
-    setNombres('');
-    setApellidos('');
-    setCedulaProductor('');
-    setNumeroTelefonico('');
-    setMunicipio('');
-    setParroquia('');
-    setSector('');
-    setNombreGranja('');
-    setTipoCredito('');
-};
 
 const validateFields = () => {
   const regexLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ ]+$/;
   const regexNumeros = /^\d{1,8}$/;
   const regexTelefono = /^\d{11}$/;
-
+  
   let errors = {};
 
   if (!regexLetras.test(nombres)) {
@@ -77,7 +66,7 @@ const validateFields = () => {
   }
 
   setErrors(errors);
-  return Object.keys(errors).length === 0; // Retorna true si no hay errores
+  return Object.keys(errors).length === 0;
 };
 
 const handleAddProductor = (e) => {
@@ -141,6 +130,18 @@ const handleMunicipioChange = (event) => {
   const selectedMunicipioId = event.target.value;
   setMunicipio(selectedMunicipioId); // Guarda el id del municipio
   fetchParroquias(selectedMunicipioId);
+};
+
+const resetForm = () => {
+    setNombres('');
+    setApellidos('');
+    setCedulaProductor('');
+    setNumeroTelefonico('');
+    setMunicipio('');
+    setParroquia('');
+    setSector('');
+    setNombreGranja('');
+    setTipoCredito('');
 };
 
 return (
